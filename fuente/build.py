@@ -118,6 +118,7 @@ def solo_brand(h,v3=False):
     h=h.replace('--ci-acc:var(--gold,#c9963e)','--ci-acc:%s'%('#60a5fa' if v3 else '#45ad92'),1)
     h=h.replace('</style>','.btn.gold,.fk.gold,.fk.gold small,.cmp .btn.gold,html[data-theme=dark] .btn.gold,html[data-theme=dark] .fk.gold,html[data-theme=dark] .fk.gold small{color:#000!important}html[data-theme=dark] .cmp-tab.on{color:%s}html[data-theme=dark]{--gold2:%s}\n</style>'%(lt,lt),1)
     return h
+import json,os
 def gym_brand(h,nc=False):
     # V27.2 · gym = «Mi Gimnasio»: oscuro deportivo con verde lima (referencia visual aprobada por el dueño).
     #         nc  = «Movimiento Inteligente» de Nahuel Cornu: su logo, su nombre y sus colores (nebulosa azul noche, turquesa y rosa, Fraunces + Jost).
@@ -162,6 +163,23 @@ def gym_brand(h,nc=False):
     # menú público con la misma identidad (CSS sin comillas dobles ni barras: va dentro del documento del menú)
     i=h.find('const PUB_DOC="');j=h.find('<\\/style>',i)
     if i>=0 and j>0: h=h[:j]+(NC_PUB if nc else GYM_PUB)+h[j:]
+    # V27.3 menú público rediseñado (gimnasio / entrenador)
+    i=h.find('const PUB_DOC="')
+    if i>=0:
+        k=i+len('const PUB_DOC=')
+        e=k+1
+        while h[e]!='"':
+            e+=2 if h[e]=='\\' else 1
+        e+=1
+        doc=open(os.path.join(os.path.dirname(os.path.abspath(__file__)),'capa-gimnasio','p11-pub.html') if os.path.exists('capa-gimnasio/p11-pub.html') else 'p11-pub.html').read()
+        V=dict(NAME='Movimiento Inteligente' if nc else 'Gimnasio Demo',KEY='minc' if nc else 'svbgym',NC='true' if nc else 'false',WAFB='5493874484132',
+          BG='#060b21' if nc else '#0a0a0a',BG2='#0b1440' if nc else '#121212',CARD='rgba(255,255,255,.06)' if nc else '#121212',
+          ACC='#3de0c5' if nc else '#a3e635',ACC2='#6ff0da' if nc else '#ccff00',
+          FD="'Fraunces',Georgia,serif" if nc else "'Poppins',system-ui,sans-serif",FU="'Jost',system-ui,sans-serif" if nc else "'Poppins',system-ui,sans-serif",
+          BODYBG='radial-gradient(620px 480px at 10% 0%,rgba(61,224,197,.16),transparent 70%),radial-gradient(620px 520px at 95% 30%,rgba(255,106,169,.12),transparent 70%),#060b21' if nc else '#0a0a0a',
+          FONTS='<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family='+('Fraunces:wght@600;700;800&family=Jost:wght@400;500;600' if nc else 'Poppins:wght@400;500;600;700;800')+'&display=swap">')
+        for a,b in V.items(): doc=doc.replace('__'+a+'__',b)
+        h=h[:k]+json.dumps(doc).replace('</','<\\/')+h[e:]
     if nc:
         h=h.replace("'<span class=\"demo-b\">DEMO DE EVALUACIÓN</span>'","''")
         h=h.replace('Demo de evaluación. Usuarios de prueba:','Usuarios iniciales (cambiá los PIN en Usuarios y permisos):')

@@ -1,0 +1,255 @@
+<!doctype html>
+<html lang="es" translate="no"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>__NAME__</title>
+__FONTS__
+<style>
+/* V27.3 · Menú público para gimnasios y entrenadores: oscuro mate, un solo acento, tarjetas de alta conversión. Sin librerías externas: funciona dentro del HTML único y sin conexión. */
+:root{--bg:__BG__;--bg2:__BG2__;--card:__CARD__;--line:rgba(255,255,255,.09);--fg:#fff;--mut:#a1a1aa;--acc:__ACC__;--acc2:__ACC2__;--on:#0a0a0a;--r:18px;--fd:__FD__;--fu:__FU__;color-scheme:dark}
+*{box-sizing:border-box}[hidden]{display:none!important}html{scroll-behavior:smooth}
+body{margin:0;background:__BODYBG__;color:var(--fg);font:16px/1.5 var(--fu);-webkit-font-smoothing:antialiased;padding-bottom:110px}
+a{color:inherit}button{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--acc);outline-offset:2px;border-radius:10px}
+.wrap{max-width:1180px;margin:0 auto;padding:0 20px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+/* header */
+.hd{position:sticky;top:0;z-index:40;background:color-mix(in srgb,var(--bg) 86%,transparent);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+.hd .wrap{display:flex;align-items:center;gap:14px;min-height:68px}
+.brand{display:flex;align-items:center;gap:12px;text-decoration:none;min-width:0;flex:1}
+.brand img{width:44px;height:44px;border-radius:12px;object-fit:cover;flex:none}
+.brand b{font:700 17px/1.15 var(--fd);letter-spacing:.02em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.lang{display:flex;border:1px solid var(--line);border-radius:99px;padding:3px}
+.lang button{border:0;background:none;min-width:44px;min-height:38px;border-radius:99px;font-weight:600;font-size:13px;cursor:pointer;color:var(--mut)}
+.lang button[aria-pressed=true]{background:var(--fg);color:var(--on)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:46px;padding:0 20px;border-radius:12px;border:1px solid var(--line);background:rgba(255,255,255,.04);font-weight:600;font-size:15px;cursor:pointer;text-decoration:none;transition:transform .15s ease,background .2s ease,box-shadow .2s ease}
+.btn:hover{transform:translateY(-1px);background:rgba(255,255,255,.08)}
+.btn.acc{background:var(--acc);color:var(--on);border-color:transparent;box-shadow:0 8px 26px color-mix(in srgb,var(--acc) 30%,transparent)}
+.btn.acc:hover{background:var(--acc2)}
+.btn svg{width:19px;height:19px;flex:none}
+.hd .btn{min-height:42px;padding:0 14px;font-size:14px}
+@media (max-width:560px){.hd .btn span{display:none}.hd .btn{padding:0 11px}.brand b{font-size:15px}}
+/* hero */
+.hero{position:relative;overflow:hidden;border-bottom:1px solid var(--line)}
+.hero .wrap{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);gap:28px;align-items:center;padding-top:54px;padding-bottom:54px}
+.hero::before{content:"";position:absolute;inset:-20% -10% auto auto;width:60%;height:140%;background:radial-gradient(closest-side,color-mix(in srgb,var(--acc) 22%,transparent),transparent);pointer-events:none}
+.badge{display:inline-flex;align-items:center;gap:8px;padding:6px 12px;border-radius:99px;border:1px solid color-mix(in srgb,var(--acc) 45%,transparent);background:color-mix(in srgb,var(--acc) 10%,transparent);color:var(--acc);font-size:13px;font-weight:600}
+.badge svg{width:15px;height:15px}
+.hero h1{font:800 clamp(34px,5.6vw,60px)/1.03 var(--fd);letter-spacing:-.025em;margin:16px 0 14px}
+.hero h1 em{font-style:normal;color:var(--acc)}
+.hero p{color:var(--mut);font-size:18px;max-width:34rem;margin:0 0 26px}
+.cta{display:flex;flex-wrap:wrap;gap:12px}
+.hero-art{position:relative;border-radius:26px;overflow:hidden;aspect-ratio:5/4;border:1px solid var(--line);background:var(--card)}
+.hero-art svg,.hero-art img{width:100%;height:100%;display:block;object-fit:cover}
+.hero-logo{position:absolute;left:18px;bottom:18px;display:flex;align-items:center;gap:10px;background:rgba(10,10,10,.72);backdrop-filter:blur(8px);padding:8px 14px 8px 8px;border-radius:14px;font-weight:600;font-size:14px}
+.hero-logo img{width:36px;height:36px;border-radius:10px;object-fit:cover}
+.stats{display:flex;gap:28px;margin-top:30px;flex-wrap:wrap}.stats div b{display:block;font:700 26px var(--fd)}.stats div span{color:var(--mut);font-size:13px}
+@media (max-width:860px){.hero .wrap{grid-template-columns:1fr;padding-top:32px;padding-bottom:36px}.hero-art{aspect-ratio:16/9}}
+/* buscador y filtros */
+.tools{position:sticky;top:68px;z-index:30;background:color-mix(in srgb,var(--bg) 90%,transparent);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.tools .wrap{padding-top:16px;padding-bottom:14px;display:flex;flex-direction:column;gap:12px}
+.search{position:relative;max-width:640px;width:100%;margin:0 auto}
+.search svg{position:absolute;left:16px;top:50%;transform:translateY(-50%);width:20px;height:20px;color:var(--mut);pointer-events:none}
+.search input{width:100%;min-height:52px;padding:0 16px 0 48px;border-radius:14px;border:1px solid var(--line);background:var(--card);color:var(--fg);font:inherit;font-size:16px;transition:border-color .2s}
+.search input::placeholder{color:#71717a}.search input:focus{outline:none;border-color:var(--acc)}
+.pills{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;justify-content:center;padding:2px}
+.pills::-webkit-scrollbar{display:none}
+@media (max-width:860px){.pills{justify-content:flex-start}}
+.pill{flex:none;min-height:42px;padding:0 18px;border-radius:99px;border:1px solid var(--line);background:transparent;color:var(--mut);font-weight:600;font-size:14px;cursor:pointer;transition:background .25s,color .25s,border-color .25s,transform .15s}
+.pill:hover{color:var(--fg);border-color:rgba(255,255,255,.2)}
+.pill[aria-pressed=true]{background:var(--acc);color:var(--on);border-color:transparent}
+.pill i{font-style:normal;opacity:.65;margin-left:6px;font-size:12px}
+/* tarjetas */
+.sec{padding:34px 0 6px}
+.sec h2{font:700 26px var(--fd);letter-spacing:-.01em;margin:0 0 4px}.sec>p{color:var(--mut);margin:0 0 18px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:18px}
+.card{position:relative;display:flex;flex-direction:column;background:var(--card);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;transition:transform .25s ease,border-color .25s ease,box-shadow .25s ease,opacity .3s ease}
+.card:hover{transform:translateY(-3px);border-color:color-mix(in srgb,var(--acc) 40%,transparent);box-shadow:0 18px 40px rgba(0,0,0,.45)}
+.card.in{animation:pop .38s ease both}
+@keyframes pop{from{opacity:0;transform:translateY(10px) scale(.98)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+.card .img{aspect-ratio:16/10;background:#111;overflow:hidden}
+.card .img svg,.card .img img{width:100%;height:100%;display:block;object-fit:cover;transition:transform .5s ease}
+.card:hover .img svg,.card:hover .img img{transform:scale(1.04)}
+.card .tag{position:absolute;top:12px;left:12px;background:var(--acc);color:var(--on);font-size:12px;font-weight:700;padding:5px 10px;border-radius:99px;letter-spacing:.02em}
+.card .body{display:flex;flex-direction:column;gap:10px;padding:18px;flex:1}
+.card h3{font:700 19px/1.25 var(--fd);margin:0}.card .sub{color:var(--mut);font-size:14px;margin-top:-6px}
+.card ul{list-style:none;margin:2px 0 0;padding:0;display:flex;flex-direction:column;gap:7px}
+.card li{display:flex;gap:9px;align-items:flex-start;font-size:14px;color:#d4d4d8}
+.card li svg{width:17px;height:17px;flex:none;color:var(--acc);margin-top:2px}
+.card .foot{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:auto;padding-top:12px;border-top:1px solid var(--line)}
+.price b{display:block;font:800 22px/1 var(--fd);color:var(--acc);white-space:nowrap}.price span{color:var(--mut);font-size:12px}
+.qty{display:flex;align-items:center;gap:2px;border:1px solid var(--line);border-radius:12px;padding:3px}
+.qty button{width:40px;height:40px;border:0;border-radius:9px;background:rgba(255,255,255,.06);font-size:20px;line-height:1;cursor:pointer;transition:background .2s}
+.qty button:hover{background:rgba(255,255,255,.13)}.qty button.plus{background:var(--acc);color:var(--on)}.qty button.plus:hover{background:var(--acc2)}
+.qty button:disabled{opacity:.35;cursor:not-allowed}
+.qty output{min-width:30px;text-align:center;font-weight:700;font-variant-numeric:tabular-nums}
+.qty output.bump{animation:bump .3s ease}@keyframes bump{50%{transform:scale(1.35);color:var(--acc)}}
+.card.sel{border-color:var(--acc)}
+.empty{text-align:center;color:var(--mut);padding:50px 10px}
+.soldout{font-size:13px;color:#f87171;font-weight:600}
+/* club y pie */
+.club{margin:44px 0 10px;border:1px solid var(--line);border-radius:24px;background:linear-gradient(120deg,var(--card),var(--bg2));padding:28px;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:24px;align-items:center}
+.club h2{font:700 26px var(--fd);margin:8px 0}.club p{color:var(--mut);margin:0}
+.club form{display:grid;gap:10px}
+.club input{width:100%;min-height:48px;padding:0 14px;border-radius:12px;border:1px solid var(--line);background:rgba(0,0,0,.35);color:var(--fg);font:inherit}
+.club label{font-size:13px;color:var(--mut)}.club .chk{display:flex;gap:10px;align-items:flex-start;font-size:13px;color:var(--mut)}.club .chk input{width:20px;min-height:20px;margin-top:2px;accent-color:var(--acc)}
+.msg{font-size:14px;min-height:1.2em}.msg.ok{color:var(--acc)}.msg.bad{color:#f87171}
+@media (max-width:860px){.club{grid-template-columns:1fr;padding:22px}}
+footer{margin-top:40px;border-top:1px solid var(--line);padding:30px 0 20px;color:var(--mut);font-size:14px}
+footer .wrap{display:flex;flex-wrap:wrap;gap:18px 40px;justify-content:space-between}
+footer b{color:var(--fg)}footer a{color:var(--fg)}
+.soc{display:flex;gap:8px;flex-wrap:wrap}.soc a{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);border-radius:99px;padding:6px 12px;text-decoration:none;font-size:13px}
+.linkbtn{background:none;border:0;padding:0;color:var(--fg);text-decoration:underline;cursor:pointer;font-size:14px}
+/* barra del pedido y panel */
+.bar{position:fixed;left:50%;bottom:16px;transform:translate(-50%,140%);z-index:50;width:min(640px,calc(100% - 24px));display:flex;align-items:center;gap:14px;padding:10px 10px 10px 18px;border-radius:18px;background:#1b1b1b;border:1px solid rgba(255,255,255,.12);box-shadow:0 20px 50px rgba(0,0,0,.6);transition:transform .35s cubic-bezier(.2,.9,.3,1.2)}
+.bar.on{transform:translate(-50%,0)}.bar .t{flex:1;min-width:0}.bar .t b{display:block;font-size:17px}.bar .t span{color:var(--mut);font-size:13px}
+.ov{position:fixed;inset:0;z-index:60;background:rgba(0,0,0,.6);opacity:0;pointer-events:none;transition:opacity .25s}
+.ov.on{opacity:1;pointer-events:auto}
+.drawer{position:fixed;right:0;top:0;bottom:0;z-index:61;width:min(460px,100%);background:#121212;border-left:1px solid var(--line);transform:translateX(100%);transition:transform .32s ease;display:flex;flex-direction:column}
+.drawer.on{transform:none}
+.drawer header{display:flex;align-items:center;justify-content:space-between;padding:18px 20px;border-bottom:1px solid var(--line)}
+.drawer header h2{margin:0;font:700 20px var(--fd)}
+.x{width:44px;height:44px;border-radius:12px;border:1px solid var(--line);background:none;font-size:22px;cursor:pointer}
+.drawer .in{flex:1;overflow:auto;padding:16px 20px;display:flex;flex-direction:column;gap:12px}
+.li{display:flex;gap:12px;align-items:center;padding:10px;border:1px solid var(--line);border-radius:14px}
+.li .n{flex:1;min-width:0}.li .n b{display:block;font-size:15px}.li .n span{color:var(--mut);font-size:13px}
+.drawer .ft{padding:16px 20px;border-top:1px solid var(--line);display:flex;flex-direction:column;gap:10px}
+.row{display:flex;gap:8px}.row input{flex:1;min-width:0;min-height:46px;padding:0 12px;border-radius:12px;border:1px solid var(--line);background:#0a0a0a;color:var(--fg);font:inherit;text-transform:uppercase}
+.tot{display:flex;justify-content:space-between;font-size:18px;font-weight:700}.tot b{color:var(--acc)}
+.note{color:var(--mut);font-size:12.5px;margin:0}
+.dlg{position:fixed;inset:auto 0 0 0;z-index:62;max-height:85vh;overflow:auto;background:#121212;border-top:1px solid var(--line);border-radius:22px 22px 0 0;padding:22px;transform:translateY(100%);transition:transform .3s ease}
+.dlg.on{transform:none}.dlg h3{font:700 18px var(--fd)}.dlg .lg{color:#d4d4d8;font-size:14px}
+.toast{position:fixed;left:50%;top:84px;transform:translateX(-50%);z-index:70;background:var(--acc);color:var(--on);font-weight:600;padding:10px 16px;border-radius:12px;box-shadow:0 10px 30px rgba(0,0,0,.4)}
+</style></head><body>
+<header class="hd"><div class="wrap"><a class="brand" href="#top" aria-label="Inicio"><img id="logo" alt=""><b id="bn"></b></a>
+ <div class="lang" role="group" aria-label="Idioma"><button type="button" data-l="es" aria-pressed="true">ES</button><button type="button" data-l="en" aria-pressed="false">EN</button></div>
+ <a class="btn acc" id="wa-top" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm5.3 14.1c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .3-3.4-.7-2.9-1.2-4.7-4.2-4.8-4.4-.1-.2-1.2-1.6-1.2-3s.7-2.2 1-2.5c.3-.3.6-.4.8-.4h.6c.2 0 .4 0 .6.5l.9 2.1c.1.2.1.4 0 .6l-.4.6-.4.5c-.1.1-.3.3-.1.6.2.3.8 1.3 1.7 2.1 1.2 1 2.1 1.3 2.4 1.5.3.1.5.1.6-.1l.9-1c.2-.3.4-.2.7-.1l2 .9c.3.1.5.2.6.3.1.2.1.7-.1 1.3z"/></svg><span data-t="wa">WhatsApp</span></a></div></header>
+<main id="top">
+<section class="hero"><div class="wrap"><div><span class="badge" id="promo" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M20 12 12 20 4 12V4h8z"/><circle cx="8.5" cy="8.5" r="1.5"/></svg><span id="promo-t"></span></span>
+ <h1 id="h1"></h1><p id="pitch"></p>
+ <div class="cta"><a class="btn acc" href="#planes" data-t="cta1">Ver planes</a><a class="btn" id="wa-hero" target="_blank" rel="noopener" data-t="cta2">Hablar por WhatsApp</a></div>
+ <div class="stats" id="stats"></div></div>
+ <div class="hero-art" id="hero-art"></div></div></section>
+<div class="tools" id="planes"><div class="wrap"><div class="search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><label class="sr" for="q" data-t="search">Buscar</label><input id="q" type="search" autocomplete="off"></div>
+ <div class="pills" id="pills" role="group" aria-label="Categorías"></div></div></div>
+<div class="wrap" id="list" aria-live="polite"></div>
+<div class="wrap"><section class="club" id="club" hidden><div><span class="badge" data-t="clubk">Club de socios</span><h2 id="club-h"></h2><p id="club-p"></p></div>
+ <form id="club-f" novalidate><div><label for="cn" data-t="cn">Nombre y apellido</label><input id="cn" autocomplete="name" required></div><div><label for="cw" data-t="cw">WhatsApp</label><input id="cw" inputmode="tel" autocomplete="tel" required></div><div><label for="cb" data-t="cb">Fecha de cumpleaños</label><input id="cb" type="date" required></div>
+ <label class="chk"><input type="checkbox" id="cc"><span data-t="cc">Acepto recibir avisos y promociones por WhatsApp (opcional).</span></label><button class="btn acc" type="submit" data-t="cj">Sumarme al club</button><div class="msg" id="cm" role="status"></div></form></section></div>
+</main>
+<footer><div class="wrap"><div><b id="fn"></b><div id="faddr"></div><div class="soc" id="soc" style="margin-top:10px"></div></div>
+ <div><button type="button" class="linkbtn" id="legal-b" data-t="legal">Términos y privacidad</button><br><button type="button" class="linkbtn" id="team" data-t="team">Acceso del equipo</button></div>
+ <div>Sistema desarrollado por <b>Vincular Business</b><br><i>“Tu idea, en buenas manos.”</i><br><a href="https://www.vincularbusiness.com.ar/" target="_blank" rel="noopener">vincularbusiness.com.ar</a> · Celular (387) 4484132<br>vincularbusiness@gmail.com</div></div></footer>
+<div class="bar" id="bar" role="region" aria-label="Tu pedido"><div class="t"><b id="bar-t"></b><span id="bar-n"></span></div><button class="btn acc" id="bar-go" type="button" data-t="review">Ver y enviar</button></div>
+<div class="ov" id="ov"></div>
+<aside class="drawer" id="dr" aria-label="Tu pedido" aria-hidden="true"><header><h2 data-t="order">Tu pedido</h2><button class="x" id="dr-x" type="button" aria-label="Cerrar">×</button></header><div class="in" id="dr-l"></div>
+ <div class="ft"><label for="cp" class="note" data-t="cp">¿Tenés un cupón?</label><div class="row"><input id="cp" maxlength="24" autocomplete="off"><button class="btn" id="cp-ok" type="button" data-t="apply">Aplicar</button></div><div class="msg" id="cp-m" role="status"></div>
+ <div class="row"><input id="nm" placeholder="Tu nombre" style="text-transform:none" autocomplete="name"></div>
+ <div class="tot"><span data-t="total">Total estimado</span><b id="dr-t"></b></div><button class="btn acc" id="send" type="button" data-t="send">Enviar por WhatsApp</button><p class="note" data-t="snote">Te respondemos para confirmar tu plan, el horario y la forma de pago. Todavía no se cobra nada.</p></div></aside>
+<div class="dlg" id="dlg" role="dialog" aria-modal="true" aria-label="Términos"><div style="display:flex;justify-content:space-between;align-items:center"><h3 data-t="legal">Términos y privacidad</h3><button class="x" id="dlg-x" type="button" aria-label="Cerrar">×</button></div><div class="lg" id="dlg-c"></div></div>
+<script>
+(function(){
+var API=null;try{API=window.parent&&window.parent.RAVE_API;}catch(e){}
+var NC=__NC__;
+var L=/lang=en/.test(window.__QS||'')?'en':'es';try{var sl=localStorage.getItem('__KEY__-lang');if(sl)L=sl;}catch(e){}
+var T={es:{wa:'WhatsApp',cta1:'Ver planes',cta2:'Hablar por WhatsApp',search:'Buscar',ph:NC?'Buscar plan, sesión o servicio…':'Buscar membresía, suplemento o servicio…',all:'Todo',review:'Ver y enviar',order:'Tu pedido',cp:'¿Tenés un cupón?',apply:'Aplicar',total:'Total estimado',send:'Enviar por WhatsApp',snote:'Te respondemos para confirmar tu plan, el horario y la forma de pago. Todavía no se cobra nada.',legal:'Términos y privacidad',team:'Acceso del equipo',clubk:NC?'Club de alumnos':'Club de socios',cn:'Nombre y apellido',cw:'WhatsApp',cb:'Fecha de cumpleaños',cc:'Acepto recibir avisos y promociones por WhatsApp (opcional).',cj:'Sumarme al club',
+ h1:NC?'Entrenamiento a tu medida: <em>elegí tu plan</em> y empezá hoy':'Tu camino al bienestar: <em>elegí tu plan</em> y comunicate con nosotros',items:function(n){return n+(n===1?' ítem':' ítems');},per:'por mes',once:'pago único',best:'Más elegido',soldout:'Sin cupo por ahora',empty:'No encontramos resultados. Probá con otra palabra.',
+ clubh:function(g,r){return 'Sumá sellos y ganá: '+r;},clubp:function(g){return 'Cada visita o compra suma un sello. Con '+g+' sellos tenés tu premio.';},hi:'Hola, quiero consultar por:',nm:'Mi nombre es',subtotal:'Total estimado',coupon:'Cupón',ph2:'Tu nombre',
+ s1:'Planes',s2:'Por semana',s3:'Atención',added:'Agregado a tu pedido',joined:'¡Listo! Ya sos parte del club.'},
+ en:{wa:'WhatsApp',cta1:'See plans',cta2:'Chat on WhatsApp',search:'Search',ph:NC?'Search plan, session or service…':'Search membership, supplement or service…',all:'All',review:'Review & send',order:'Your order',cp:'Have a coupon?',apply:'Apply',total:'Estimated total',send:'Send via WhatsApp',snote:'We will reply to confirm your plan, schedule and payment method. Nothing is charged yet.',legal:'Terms & privacy',team:'Team access',clubk:NC?'Members club':'Members club',cn:'Full name',cw:'WhatsApp',cb:'Birthday',cc:'I agree to receive updates and offers via WhatsApp (optional).',cj:'Join the club',
+ h1:NC?'Training made for you: <em>pick your plan</em> and start today':'Your path to wellness: <em>pick your plan</em> and get in touch',items:function(n){return n+(n===1?' item':' items');},per:'per month',once:'one-time',best:'Most popular',soldout:'No spots right now',empty:'No results. Try another word.',
+ clubh:function(g,r){return 'Collect stamps and win: '+r;},clubp:function(g){return 'Every visit or purchase adds a stamp. Get your reward with '+g+' stamps.';},hi:'Hi, I would like to ask about:',nm:'My name is',subtotal:'Estimated total',coupon:'Coupon',ph2:'Your name',
+ s1:'Plans',s2:'Per week',s3:'Support',added:'Added to your order',joined:'Done! You are now a club member.'}};
+var t=function(k){return T[L][k];};
+var $=function(s){return document.querySelector(s);};
+var esc=function(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});};
+var clean=function(s){return String(s||'').replace(/\s*\((ejemplo|example|demo)\)/gi,'').replace(/\s*[·-]\s*(ejemplo|demo|example)\b/gi,'').trim();};
+var fmt=function(n){return '$ '+Math.round(n).toLocaleString('es-AR');};
+var md=function(s){return esc(clean(s)).replace(/\*\*(.+?)\*\*/g,'<b>$1</b>');};
+var SITE={},CAT={secciones:[],productos:[]},cart={},cat='',q='',coupon=null;
+function load(){try{SITE=API?API.site():{};}catch(e){SITE={};}try{CAT=API?API.catalog():CAT;}catch(e){}}
+var WA=function(){return String(SITE.wa||'__WAFB__').replace(/\D/g,'');};
+var waUrl=function(m){return 'https://wa.me/'+WA()+'?text='+encodeURIComponent(m);};
+/* ilustraciones vectoriales propias por tipo (no hay fotos de terceros) */
+var ART={barra:'<rect x="20" y="70" width="10" height="40" rx="3" fill="A"/><rect x="32" y="60" width="10" height="60" rx="3" fill="A"/><rect x="158" y="60" width="10" height="60" rx="3" fill="A"/><rect x="170" y="70" width="10" height="40" rx="3" fill="A"/><rect x="42" y="86" width="116" height="8" rx="4" fill="#fff" opacity=".85"/><rect x="8" y="84" width="12" height="12" rx="3" fill="#fff" opacity=".5"/><rect x="180" y="84" width="12" height="12" rx="3" fill="#fff" opacity=".5"/>',
+ clase:'<circle cx="60" cy="50" r="10" fill="#fff" opacity=".85"/><circle cx="100" cy="44" r="10" fill="A"/><circle cx="140" cy="50" r="10" fill="#fff" opacity=".85"/><path d="M60 62v40M100 56v46M140 62v40M44 78h32M84 72h32M124 78h32" stroke="#fff" stroke-width="7" stroke-linecap="round" opacity=".85"/>',
+ fuerza:'<path d="M84 60c0-10 8-18 16-18s16 8 16 18v4H84z" fill="A"/><rect x="74" y="64" width="52" height="46" rx="16" fill="A"/><rect x="92" y="80" width="16" height="6" rx="3" fill="#000" opacity=".35"/>',
+ patrones:'<circle cx="100" cy="34" r="11" fill="#fff" opacity=".85"/><path d="M100 46v26l-22 30M100 72l22 30M74 58h52" stroke="#fff" stroke-width="7" stroke-linecap="round" fill="none" opacity=".85"/><path d="M40 112c30-14 90-14 120 0" stroke="A" stroke-width="6" fill="none" stroke-linecap="round"/>',
+ hiit:'<path d="M106 18 62 82h30l-8 50 46-66h-30z" fill="A"/><circle cx="100" cy="76" r="54" stroke="#fff" stroke-width="5" fill="none" opacity=".35" stroke-dasharray="6 10"/>',
+ virtual:'<rect x="46" y="34" width="108" height="70" rx="10" fill="#fff" opacity=".9"/><path d="M86 52v34l28-17z" fill="A"/><path d="M80 118h40" stroke="#fff" stroke-width="7" stroke-linecap="round" opacity=".85"/>',
+ frasco:'<rect x="72" y="40" width="56" height="78" rx="12" fill="#fff" opacity=".9"/><rect x="78" y="28" width="44" height="14" rx="5" fill="A"/><rect x="80" y="66" width="40" height="24" rx="5" fill="A"/>',
+ botella:'<path d="M92 24h16v18l10 14v62a8 8 0 0 1-8 8H90a8 8 0 0 1-8-8V56l10-14z" fill="#fff" opacity=".9"/><rect x="82" y="70" width="36" height="26" fill="A"/>',
+ remera:'<path d="M70 34l-24 14 12 22 12-6v58h60V64l12 6 12-22-24-14c-4 10-14 14-30 14S74 44 70 34z" fill="#fff" opacity=".9"/><circle cx="100" cy="78" r="10" fill="A"/>',
+ eval:'<rect x="50" y="40" width="100" height="74" rx="12" fill="#fff" opacity=".9"/><path d="M62 98l20-22 16 12 24-30 16 14" stroke="A" stroke-width="7" fill="none" stroke-linecap="round" stroke-linejoin="round"/>',
+ pase:'<rect x="44" y="40" width="112" height="70" rx="12" fill="#fff" opacity=".9"/><circle cx="76" cy="75" r="14" fill="A"/><path d="M100 64h40M100 80h28" stroke="#111" stroke-width="7" stroke-linecap="round"/>'};
+function art(k,big){var a=getComputedStyle(document.documentElement).getPropertyValue('--acc').trim()||'#a3e635';return '<svg viewBox="0 0 200 140" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><defs><linearGradient id="g'+k+'" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#2a2a2e"/><stop offset="1" stop-color="#0c0c0e"/></linearGradient><radialGradient id="r'+k+'" cx=".85" cy=".1" r=".7"><stop offset="0" stop-color="'+a+'" stop-opacity=".28"/><stop offset="1" stop-color="'+a+'" stop-opacity="0"/></radialGradient></defs><rect width="200" height="140" fill="url(#g'+k+')"/><rect width="200" height="140" fill="url(#r'+k+')"/>'+(ART[k]||ART.barra).replace(/"A"/g,'"'+a+'"')+'</svg>';}
+function artFor(p){var n=(p.nom+' '+p.sub+' '+p.cat).toLowerCase();
+ if(/virtual|online/.test(n))return 'virtual';if(/1 sesi|personal|sesi/.test(n))return NC?'patrones':'fuerza';if(/2 sesi/.test(n))return 'fuerza';if(/3 sesi|hiit/.test(n))return 'hiit';
+ if(/clase|pack|funcional|grupal/.test(n))return 'clase';if(/diario|pase diario/.test(n))return 'pase';if(/libre|muscula|membres|plan/.test(n))return 'barra';
+ if(/prote|creatina|barra de|suplem|bcaa/.test(n))return 'frasco';if(/agua|bebida|isot|yogur|snack/.test(n))return 'botella';if(/remera|toalla|guante|banda|botella deport|indument|accesor/.test(n))return 'remera';if(/evalua|servic/.test(n))return 'eval';return 'barra';}
+function benefits(p){var d=clean(p.desc||'');var L2=d?d.split(/\s*[·;\n]\s*|,\s(?=[A-ZÁÉÍÓÚ])/).filter(Boolean):[];
+ var n=(p.nom+' '+p.sub).toLowerCase();if(/plan|membres|mensual/.test(String(p.sub).toLowerCase()+' '+String(p.cat))||/sesi/.test(n)){if(L2.length<3)L2.push(L==='en'?'Personalized plan from day one':'Plan personalizado desde el primer día');if(L2.length<3)L2.push(L==='en'?'Progress tracking in your app':'Seguimiento de tu progreso en la app');}
+ return L2.slice(0,4);}
+var CK='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>';
+function isPlan(p){return /membres|plan|mensual|pase/i.test(String(p.sub)+' '+String(p.cat))||/^gm-memb$/.test(p.cat);}
+function card(p,i){var qn=cart[p.id]?cart[p.id].qty:0;var plan=isPlan(p);var img=p.img?'<img src="'+esc(p.img)+'" alt="" loading="lazy">':art(artFor(p));
+ return '<article class="card in'+(qn?' sel':'')+'" style="animation-delay:'+(Math.min(i,10)*35)+'ms" data-id="'+esc(p.id)+'"><div class="img">'+img+'</div>'+(p.destacado?'<span class="tag">'+t('best')+'</span>':'')+
+ '<div class="body"><h3>'+esc(clean(p.nom))+'</h3>'+(p.sub?'<div class="sub">'+esc(clean(p.sub))+'</div>':'')+'<ul>'+benefits(p).map(function(b){return '<li>'+CK+'<span>'+esc(b)+'</span></li>';}).join('')+'</ul>'+
+ '<div class="foot"><div class="price"><b>'+fmt(p.precio)+'</b><span>'+(plan&&!/diario|semana/i.test(p.nom)?t('per'):t('once'))+'</span></div>'+(p.agotado?'<span class="soldout">'+t('soldout')+'</span>':
+ '<div class="qty" role="group" aria-label="Cantidad de '+esc(clean(p.nom))+'"><button type="button" class="minus" data-d="-1" aria-label="Quitar uno"'+(qn?'':' disabled')+'>−</button><output aria-live="polite">'+qn+'</output><button type="button" class="plus" data-d="1" aria-label="Agregar uno">+</button></div>')+'</div></div></article>';}
+function norm(s){return String(s||'').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'');}
+function render(){var P=CAT.productos||[],S2=CAT.secciones||[];var nq=norm(q).trim();
+ $('#pills').innerHTML=[['',t('all'),P.length]].concat(S2.map(function(s){return [s.cat,clean(s.nom),P.filter(function(p){return p.cat===s.cat;}).length];})).filter(function(x){return x[2];}).map(function(x){return '<button type="button" class="pill" data-c="'+esc(x[0])+'" aria-pressed="'+(cat===x[0])+'">'+esc(x[1])+'<i>'+x[2]+'</i></button>';}).join('');
+ var html='',idx=0;S2.forEach(function(s){if(cat&&s.cat!==cat)return;var L2=P.filter(function(p){return p.cat===s.cat&&(!nq||norm(p.nom+' '+p.sub+' '+p.desc).indexOf(nq)>=0);});if(!L2.length)return;
+  html+='<section class="sec"><h2>'+esc(clean(s.titulo||s.nom))+'</h2>'+(s.hint?'<p>'+esc(clean(s.hint))+'</p>':'')+'<div class="grid">'+L2.map(function(p){return card(p,idx++);}).join('')+'</div></section>';});
+ $('#list').innerHTML=html||'<p class="empty">'+t('empty')+'</p>';}
+function totals(){var n=0,s=0;Object.keys(cart).forEach(function(k){n+=cart[k].qty;s+=cart[k].qty*cart[k].price;});return{n:n,s:s};}
+function bar(){var x=totals();$('#bar').classList.toggle('on',x.n>0);$('#bar-t').textContent=fmt(x.s);$('#bar-n').textContent=t('items')(x.n);}
+function setQty(id,d){var p=(CAT.productos||[]).find(function(z){return z.id===id;});if(!p)return;var c=cart[id]||{name:clean(p.nom),price:p.precio,qty:0};c.qty=Math.max(0,Math.min(20,c.qty+d));if(c.qty)cart[id]=c;else delete cart[id];
+ var el=document.querySelector('.card[data-id="'+(window.CSS&&CSS.escape?CSS.escape(id):id)+'"]');if(el){var o=el.querySelector('output');o.textContent=c.qty;o.classList.remove('bump');void o.offsetWidth;o.classList.add('bump');el.querySelector('.minus').disabled=!c.qty;el.classList.toggle('sel',!!c.qty);}
+ if(d>0&&totals().n===1)toast(t('added'));coupon=null;bar();}
+function toast(m){var d=document.createElement('div');d.className='toast';d.textContent=m;document.body.appendChild(d);setTimeout(function(){d.remove();},1800);}
+function drawer(on){$('#dr').classList.toggle('on',on);$('#ov').classList.toggle('on',on);$('#dr').setAttribute('aria-hidden',!on);if(on){paintDr();setTimeout(function(){$('#dr-x').focus();},50);}}
+function paintDr(){var ids=Object.keys(cart);$('#dr-l').innerHTML=ids.map(function(k){var c=cart[k];return '<div class="li"><div class="n"><b>'+esc(c.name)+'</b><span>'+c.qty+' × '+fmt(c.price)+'</span></div><div class="qty"><button type="button" data-k="'+esc(k)+'" data-d="-1" class="minus" aria-label="Quitar uno">−</button><output>'+c.qty+'</output><button type="button" class="plus" data-k="'+esc(k)+'" data-d="1" aria-label="Agregar uno">+</button></div></div>';}).join('')||'<p class="empty">—</p>';
+ var x=totals();$('#dr-t').textContent=fmt(coupon&&coupon.ok?coupon.total:x.s);}
+function send(){var ids=Object.keys(cart);if(!ids.length)return;var x=totals(),nm=$('#nm').value.trim();var lines=[t('hi'),''];ids.forEach(function(k){var c=cart[k];lines.push('• '+c.qty+' × '+c.name+' — '+fmt(c.qty*c.price));});
+ lines.push('',t('subtotal')+': '+fmt(x.s));if(coupon&&coupon.ok)lines.push(t('coupon')+' '+coupon.code+': '+(L==='en'?coupon.descEn:coupon.desc)+' → '+fmt(coupon.total));if(nm)lines.push('',t('nm')+' '+nm+'.');
+ try{if(API&&API.orderRequest)API.orderRequest({items:ids.map(function(k){return{id:k,qty:cart[k].qty};}),total:coupon&&coupon.ok?coupon.total:x.s,coupon:coupon&&coupon.ok?coupon.code:''});}catch(e){}
+ window.open(waUrl(lines.join('\n')),'_blank','noopener');}
+function site(){var nm=clean(SITE.title&&SITE.title!=='RAVE DIGITAL'?SITE.title:'__NAME__');var ttl=nm.replace(/\b([A-ZÁÉÍÓÚÑ])([A-ZÁÉÍÓÚÑ]+)\b/g,function(m,a,b){return a+b.toLowerCase();});
+ $('#bn').textContent=ttl;$('#fn').textContent=ttl;document.title=ttl;
+ var lg='';try{lg=API&&API.brand?API.brand().logo:'';}catch(e){}if(lg){$('#logo').src=lg;}
+ $('#h1').innerHTML=t('h1');var pit=SITE.pitch?(SITE.pitch[L]||SITE.pitch.es):'';$('#pitch').innerHTML=md(pit);
+ var pr=SITE.promo&&SITE.promo.on?(SITE.promo[L]||SITE.promo.es):'';$('#promo').hidden=!pr;$('#promo-t').innerHTML=md(pr);
+ var P=CAT.productos||[],pl=P.filter(isPlan);var pm=pl.filter(function(p){return !/diario|semana|clase suelta/i.test(p.nom);});if(!pm.length)pm=pl;var mn=pm.length?Math.min.apply(null,pm.map(function(p){return p.precio;})):0;
+ $('#stats').innerHTML=(pl.length?'<div><b>'+pl.length+'</b><span>'+t('s1')+'</span></div><div><b>'+fmt(mn)+'</b><span>'+(L==='en'?'from':'desde')+' / '+t('per')+'</span></div>':'')+'<div><b>'+(NC?'1 a 1':'7 días')+'</b><span>'+(NC?(L==='en'?'personal coaching':'entrenamiento personal'):(L==='en'?'open week':'de la semana'))+'</span></div>';
+ $('#hero-art').innerHTML=art(NC?'patrones':'barra')+(lg?'<div class="hero-logo"><img src="'+lg+'" alt=""><span>'+esc(ttl)+'</span></div>':'');
+ var msg=(L==='en'?'Hi! I would like information about the plans at ':'¡Hola! Quiero información sobre los planes de ')+ttl+'.';$('#wa-top').href=waUrl(msg);$('#wa-hero').href=waUrl(msg);
+ $('#faddr').textContent=clean(SITE.address||'');
+ $('#soc').innerHTML=(SITE.social||[]).map(function(s){return /^https:\/\//.test(s.url)?'<a href="'+esc(s.url)+'" target="_blank" rel="noopener">'+esc(s.label)+'</a>':'';}).join('');
+ $('#team').hidden=!!SITE.hideTeamBtn;
+ var club=SITE.clubOn!==false&&SITE.club;$('#club').hidden=!club;if(club){$('#club-h').textContent=t('clubh')(SITE.club.goal,clean(SITE.club.reward));$('#club-p').textContent=t('clubp')(SITE.club.goal);}
+ document.querySelectorAll('[data-t]').forEach(function(e){var v=T[L][e.getAttribute('data-t')];if(typeof v==='string')e.textContent=v;});
+ $('#q').placeholder=t('ph');$('#nm').placeholder=t('ph2');document.documentElement.lang=L;
+ document.querySelectorAll('.lang button').forEach(function(b){b.setAttribute('aria-pressed',b.getAttribute('data-l')===L);});
+ window.RAVE_LANG=function(){return L;};}
+function all(){load();site();render();bar();}
+document.addEventListener('click',function(e){var b=e.target.closest('button,a');if(!b)return;
+ if(b.matches('.lang button')){L=b.getAttribute('data-l');try{localStorage.setItem('__KEY__-lang',L);}catch(x){}all();return;}
+ if(b.classList.contains('pill')){cat=b.getAttribute('data-c');render();var y=$('#planes').getBoundingClientRect().top+scrollY-68;if(scrollY>y)scrollTo({top:y,behavior:'smooth'});return;}
+ if(b.closest('.card')&&b.hasAttribute('data-d')){setQty(b.closest('.card').getAttribute('data-id'),+b.getAttribute('data-d'));return;}
+ if(b.closest('#dr-l')&&b.hasAttribute('data-d')){setQty(b.getAttribute('data-k'),+b.getAttribute('data-d'));render();paintDr();if(!totals().n)drawer(false);return;}
+ if(b.id==='bar-go'){drawer(true);return;}if(b.id==='dr-x'){drawer(false);return;}if(b.id==='send'){send();return;}
+ if(b.id==='cp-ok'){var c=$('#cp').value.trim();var m=$('#cp-m');if(!c||!API||!API.couponInfo){m.textContent='';return;}var r=API.couponInfo(c,totals().s);coupon=r;m.className='msg '+(r.ok?'ok':'bad');m.textContent=r.ok?(L==='en'?r.descEn:r.desc):(L==='en'?r.msgEn:r.msg);paintDr();return;}
+ if(b.id==='legal-b'){var D=[];try{D=API&&API.legal?API.legal():[];}catch(x){}$('#dlg-c').innerHTML=D.map(function(d){return '<h3>'+esc(L==='en'&&d.titleEn?d.titleEn:d.title)+'</h3>'+d.html;}).join('');$('#dlg').classList.add('on');$('#ov').classList.add('on');return;}
+ if(b.id==='dlg-x'){$('#dlg').classList.remove('on');$('#ov').classList.remove('on');return;}
+ if(b.id==='team'){try{API.openPanel();}catch(x){}return;}});
+$('#ov').addEventListener('click',function(){drawer(false);$('#dlg').classList.remove('on');});
+document.addEventListener('keydown',function(e){if(e.key==='Escape'){drawer(false);$('#dlg').classList.remove('on');$('#ov').classList.remove('on');}});
+var qt;$('#q').addEventListener('input',function(){clearTimeout(qt);var v=this.value;qt=setTimeout(function(){q=v;render();},160);});
+$('#club-f').addEventListener('submit',function(e){e.preventDefault();var m=$('#cm');if(!API||!API.clubJoin){m.className='msg bad';m.textContent='—';return;}
+ var r=API.clubJoin({nombre:$('#cn').value,whatsapp:$('#cw').value.replace(/\D/g,''),cumple:$('#cb').value,comm:$('#cc').checked});m.className='msg '+(r&&r.ok?'ok':'bad');m.textContent=r&&r.ok?t('joined'):((r&&r.msg)||'—');if(r&&r.ok){this.reset();try{if(r.cardId)localStorage.setItem('rave.card',r.cardId);}catch(x){}}});
+window.RAVE_PUB_REFRESH=function(){var keep=cart;all();cart=keep;bar();};
+all();
+})();
+</script>
+</body></html>
