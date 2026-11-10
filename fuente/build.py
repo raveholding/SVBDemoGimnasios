@@ -157,6 +157,12 @@ def gym_brand(h,nc=False):
     h=h.replace('</style>','.btn.gold,.fk.gold,.fk.gold small,.cmp .btn.gold,html[data-theme=dark] .btn.gold,html[data-theme=dark] .fk.gold,html[data-theme=dark] .fk.gold small{color:#000!important}html[data-theme=dark] .cmp-tab.on{color:%s}html[data-theme=dark]{--gold2:%s}\n'%(lt,lt)+GYM_CSS+'\n'+theme+'\n</style>',1)
     # tema del panel: oscuro por defecto y preferencia propia de este sitio (los repositorios comparten el origen raveholding.github.io)
     h=h.replace("function themePref(){try{const v=localStorage.getItem('rave.theme');return THEMES[v]?v:'auto';}","function themePref(){try{const v=localStorage.getItem('%s');return THEMES[v]?v:'dark';}"%tkey,1)
+    # V27.4 · el botón de tema alterna Claro / Oscuro y guarda en la misma clave que lee
+    h=h.replace("A.themeCycle=()=>{const o=['auto','light','dark'];const n=o[(o.indexOf(themePref())+1)%3];try{localStorage.setItem('rave.theme',n);}","A.themeCycle=()=>{const n=themeEff()==='dark'?'light':'dark';try{localStorage.setItem('%s',n);}"%tkey,1)
+    assert "localStorage.setItem('%s',n)"%tkey in h
+    # reproductor de YouTube embebido dentro del sistema
+    h=h.replace("frame-src https://www.google.com;","frame-src https://www.google.com https://www.youtube-nocookie.com;",1)
+
     h=h.replace("localStorage.setItem('rave.theme',n)","localStorage.setItem('%s',n)"%tkey,1)
     # vocabulario de gimnasio en la barra
     h=h.replace("club:{t:()=>IS_CLIENT?'Club RAVE':'Club de clientes'","club:{t:()=>'Club de %s'"%('alumnos' if nc else 'socios'),1)
