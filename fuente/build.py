@@ -156,6 +156,17 @@ def gym_brand(h,nc=False):
     h=h.replace('#side a.on{background:var(--gold);color:#1b1100;','#side a.on{background:var(--gold);color:#000;',1)
     h=h.replace('</style>','.btn.gold,.fk.gold,.fk.gold small,.cmp .btn.gold,html[data-theme=dark] .btn.gold,html[data-theme=dark] .fk.gold,html[data-theme=dark] .fk.gold small{color:#000!important}html[data-theme=dark] .cmp-tab.on{color:%s}html[data-theme=dark]{--gold2:%s}\n'%(lt,lt)+GYM_CSS+'\n'+theme+'\n</style>',1)
     # tema del panel: oscuro por defecto y preferencia propia de este sitio (los repositorios comparten el origen raveholding.github.io)
+    # V27.6 · el dominio raveholding.github.io es compartido por todas las demos y su localStorage puede llenarse
+    # con datos de otras: si una preferencia chica no entra, se guarda en una cookie de ESTE sitio (ruta propia).
+    LSFIX="""<script>(function(){try{var P=Storage.prototype,si=P.setItem,gi=P.getItem,ri=P.removeItem;if(P.__vbfix)return;P.__vbfix=1;
+var path=(location.pathname.replace(/[^/]*$/,'')||'/'),ck=function(k){return 'vbls_'+encodeURIComponent(k).replace(/%/g,'_');},
+rd=function(k){var n=ck(k)+'=',a=document.cookie.split('; ');for(var i=0;i<a.length;i++)if(a[i].indexOf(n)===0){try{return decodeURIComponent(a[i].slice(n.length));}catch(e){return null;}}return null;},
+wr=function(k,v){document.cookie=ck(k)+'='+encodeURIComponent(v)+';path='+path+';max-age=31536000;SameSite=Lax';};
+P.setItem=function(k,v){try{si.call(this,k,v);if(this===window.localStorage&&rd(k)!==null)document.cookie=ck(k)+'=;path='+path+';max-age=0';}catch(e){if(this===window.localStorage&&String(v).length<=1500&&location.protocol!=='file:'){wr(k,String(v));return;}throw e;}};
+P.getItem=function(k){var v=gi.call(this,k);if(v===null&&this===window.localStorage){var c=rd(k);if(c!==null)return c;}return v;};
+P.removeItem=function(k){ri.call(this,k);if(this===window.localStorage&&rd(k)!==null)document.cookie=ck(k)+'=;path='+path+';max-age=0';};}catch(e){}})();</script>"""
+    _i=h.find('<script')
+    if _i>=0 and 'P.__vbfix' not in h: h=h[:_i]+LSFIX+h[_i:]
     # tema: claro/oscuro propio de este sitio (origen compartido), arranca en oscuro
     h=h.replace("localStorage.getItem('rave.theme')","localStorage.getItem('%s')"%tkey).replace("localStorage.setItem('rave.theme',","localStorage.setItem('%s',"%tkey)
     h=h.replace("return THEMES[v]?v:'auto';}","return THEMES[v]?v:'dark';}",1)
