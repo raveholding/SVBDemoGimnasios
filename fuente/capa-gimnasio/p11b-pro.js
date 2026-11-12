@@ -366,7 +366,17 @@ const _uxB=uxBadges;uxBadges=function(){const b=_uxB();try{if(on('gdash')){const
 if(typeof gCfgCard==='function'){const o=gCfgCard;gCfgCard=function(){return o.apply(this,arguments)+window.gProCfg();};}
 const _ini=SCREENS.ginicio&&SCREENS.ginicio.render;if(_ini)SCREENS.ginicio.render=function(){const h=_ini.apply(this,arguments);let x='';try{if(on('gdash')){const Q=todo(),M=metrics();x=`<div class="card" style="margin:0 0 1rem"><div class="row" style="flex-wrap:wrap"><b class="sp">MRR ${money0(M.mrr)} · abandono ${pct(M.churn)} · ocupación ${pct(M.occ)}</b><button class="btn sm gold" data-act="nav" data-id="gdash">${Q.length?Q.length+' para contactar hoy':'Panel de negocio'}</button></div></div>`;}}catch(e){}const i=h.indexOf('</h1>');if(i<0)return x+h;const j=h.indexOf('</div>',i);return j<0?x+h:h.slice(0,j+6)+x+h.slice(j+6);};
 ['gdash','glockers','gcred','gcanchas','gtorneos','gcontacto','gwod'].forEach(k=>{const s=SCREENS[k];if(!s)return;const r=s.render;s.render=function(){if(!on(k))return`<div class="card"><h2>Módulo apagado</h2><p>Prendelo en Configuración › ${GW().g} › Rubro y módulos.</p></div>`;return r.apply(this,arguments);};});
-window.gProBoot=()=>{try{P();applyNav();seed();sweep();}catch(e){}};
+/* ---------- Portero digital: importa los ingresos de la puerta a Control de acceso ---------- */
+const PTK=()=>'gym-portero-out:'+((window.RAVE_BUILD&&window.RAVE_BUILD.db)||'');
+function portIn(){let L=[];try{L=JSON.parse(localStorage.getItem(PTK())||'[]');}catch(e){return 0;}if(!L.length)return 0;let n=0;const seen=new Set(G().acc.filter(a=>a.src==='portero').map(a=>a.cust+'|'+a.ts));
+ L.forEach(e=>{if(!e||!e.cust||seen.has(e.cust+'|'+e.ts)||!gCust(e.cust))return;G().acc.push({id:uid(),cust:e.cust,ts:e.ts,method:e.method==='dni'?'dni':'qr',res:e.res,why:e.why||'',type:'in',src:'portero'});n++;
+  if(e.res!=='denied'){const t=dkey(e.ts);if(!G().att.some(a=>a.cust===e.cust&&a.date===t))G().att.push({id:uid(),cust:e.cust,date:t,ts:e.ts,src:'portero'});}});
+ try{localStorage.removeItem(PTK());}catch(e){}if(n){quiet=true;try{audit('GYM_PORTERO',n+' ingreso(s) desde el portero digital');save();}finally{quiet=false;}}return n;}
+window.addEventListener('storage',e=>{if(e.key===PTK()&&portIn()&&/gacceso|gdash|ginicio/.test(curScreen))rerender();});
+setInterval(()=>{try{if(portIn()&&/gacceso|gdash|ginicio/.test(curScreen))rerender();}catch(e){}},15000);
+const portUrl=()=>{try{return new URL('portero.html',location.href).href;}catch(e){return'portero.html';}};
+{const _ac=SCREENS.gacceso&&SCREENS.gacceso.render;if(_ac)SCREENS.gacceso.render=function(){const h=_ac.apply(this,arguments);const x=`<div class="card gp-glass" style="margin:0 0 1rem"><div class="row" style="flex-wrap:wrap;gap:.6rem"><div class="sp"><b>Portero digital para la puerta</b><div class="sm mut">Instalalo en la tablet o el celular de la entrada: valida la cuota con el QR de la app o el DNI, tiene timbre por áreas, pases de visita, PIN del equipo y emergencia. Los ingresos llegan solos acá.</div></div><button class="btn gold" data-act="gOpenUrl" data-u="${esc(portUrl())}">Abrir el portero</button></div></div>`;const i=h.indexOf('</h1>');if(i<0)return x+h;const j=h.indexOf('</div>',i);return j<0?x+h:h.slice(0,j+6)+x+h.slice(j+6);};}
+window.gProBoot=()=>{try{P();applyNav();seed();sweep();portIn();}catch(e){}};
 if(typeof A.login==='function'){const _l=A.login;A.login=function(){const r=_l.apply(this,arguments);window.gProBoot();return r;};}
 {const _ir=SCREENS.ginicio.render;let booted=0;SCREENS.ginicio.render=function(){if(!booted){booted=1;window.gProBoot();}return _ir.apply(this,arguments);};}
 try{applyNav();}catch(e){}

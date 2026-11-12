@@ -28,3 +28,11 @@ Demo de **Sistema Vincular Business** para gimnasios: el sistema completo de rav
 `fuente/` es una copia de la fuente única de Sistema VB (`AlmacenRAVE/fuente`, V26.65) con el módulo `p11-gym.js` y los perfiles `gym` y `nc` en `build.py`. Compilar: `cd fuente && python3 build.py gym ../index.html`. Detalle en `fuente/PROMPT_DEMO_GIMNASIOS.md`.
 
 Desarrollado por **Vincular Business** · Celular (387) 4484132 · https://www.vincularbusiness.com.ar/ · vincularbusiness@gmail.com · *“Tu idea, en buenas manos.”*
+
+## Portero digital (`portero.html`)
+
+Para la tablet o el celular de la entrada. Se abre desde Gimnasio › Acceso › "Abrir el portero".
+- **Socios / alumnos:** entran con el QR dinámico de la app (lector USB o Bluetooth tipo teclado) o escribiendo su DNI. El portero lee los datos del sistema en el mismo equipo y valida la cuota: al día abre, en período de gracia abre con aviso, vencida, congelada o de baja no abre y ofrece llamar a Administración. Cada ingreso aparece solo en Control de acceso.
+- Timbre por áreas con avisos al celular (ntfy o WhatsApp), timbre por QR desde el celular del visitante (`timbre.html`), pases de visita, PIN del equipo, PIN de coacción, tarjeta NFC, horarios, emergencia, asistente de voz y relé ESP32.
+- Panel de configuración: doble toque en una zona libre de la pantalla. PIN de fábrica 1234 (cambiarlo en la puesta en marcha).
+- Requisito: abrir el sistema al menos una vez en ese mismo equipo y navegador, para que el portero tenga los socios. La carpeta `face/` sólo se usa si se activa el reconocimiento facial del personal (apagado de fábrica).
