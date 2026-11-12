@@ -248,8 +248,10 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){drawer(fals
 var qt;$('#q').addEventListener('input',function(){clearTimeout(qt);var v=this.value;qt=setTimeout(function(){q=v;render();},160);});
 $('#club-f').addEventListener('submit',function(e){e.preventDefault();var m=$('#cm');if(!API||!API.clubJoin){m.className='msg bad';m.textContent='—';return;}
  var r=API.clubJoin({nombre:$('#cn').value,whatsapp:$('#cw').value.replace(/\D/g,''),cumple:$('#cb').value,comm:$('#cc').checked});m.className='msg '+(r&&r.ok?'ok':'bad');m.textContent=r&&r.ok?t('joined'):((r&&r.msg)||'—');if(r&&r.ok){this.reset();try{if(r.cardId)localStorage.setItem('rave.card',r.cardId);}catch(x){}}});
-var taps=[];$('#logo').addEventListener('click',function(){var n=Date.now();taps=taps.filter(function(x){return n-x<3000;});taps.push(n);if(taps.length>=5){taps=[];try{API.openPanel();}catch(e){}}else scrollTo({top:0,behavior:'smooth'});});
-$('#bn').addEventListener('dblclick',function(){try{API.openPanel();}catch(e){}});
+/* acceso oculto al panel: doble clic (o doble toque en el celular) sobre el logo o el nombre */
+var lastTap=0,openP=function(e){if(e)e.preventDefault();try{API.openPanel();}catch(x){}};
+['#logo','#bn'].forEach(function(sel){var el=$(sel);el.addEventListener('dblclick',openP);el.addEventListener('touchend',function(e){var n=Date.now();if(n-lastTap<350){lastTap=0;openP(e);}else lastTap=n;});});
+$('.brand').style.userSelect='none';
 window.RAVE_PUB_REFRESH=function(){var keep=cart;all();cart=keep;bar();};
 all();
 })();

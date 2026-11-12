@@ -40,7 +40,7 @@ if V=='cliente':
          '<meta property="og:locale" content="es_AR">\n<script type="application/ld+json">%s</script>')%(seo_t,seo_d,pub,seo_t,seo_d,pub,json.dumps(ld,ensure_ascii=False))
     head=head.replace('<title>Sistema RAVE · Almacén y Licorería RAVE — Demo</title>',seo)
 head=head.replace('<style>',cfg+'<style>',1)
-parts=['p2-core.js','p2b-sort.js','p2c-ux.js','p3-ops.js','p3b-pos.js','p3p-payadj.js','p3n-posquick.js','p3c-cash.js','p3q-cortes.js','p3f-transfers.js','p3g-paydetail.js','p3h-expediente.js','p3i-rubcash.js','p3j-combos.js','p3k-owner.js','p3l-kini.js','p3o-solo.js','p3m-payacc.js','p3d-assist.js','p3e-saledetail.js','p3r-oper.js','p6-loyalty.js','p6c-custadmin.js','p6d-cardportable.js','p6e-wallet.js','p6b-wholesale.js','p6f-credito.js','p6g-wacliente.js','p6h-fidel.js','p6i-fiscal.js','p6j-crm.js','p4-mods.js','p4f-rrhh.js','p4c-compras.js','p4d-compras-ui.js','p4e-factura.js','p4b-online.js','p7a-dash.js','p7b-charts.js','p7c-scale.js','p7-devices.js','p8-legal.js','p9-cloud.js','p9b-arca.js','p9c-tiendanube.js','p5c-menusec.js','p5b-store.js','p5d-cscreen.js','p5-menu-boot.js']
+parts=['p2-core.js','p2b-sort.js','p2c-ux.js','p3-ops.js','p3b-pos.js','p3p-payadj.js','p3n-posquick.js','p3c-cash.js','p3q-cortes.js','p3f-transfers.js','p3g-paydetail.js','p3h-expediente.js','p3i-rubcash.js','p3j-combos.js','p3k-owner.js','p3l-kini.js','p3o-solo.js','p3m-payacc.js','p3d-assist.js','p3e-saledetail.js','p3r-oper.js','p6-loyalty.js','p6c-custadmin.js','p6d-cardportable.js','p6e-wallet.js','p6b-wholesale.js','p6f-credito.js','p6g-wacliente.js','p6h-fidel.js','p6i-fiscal.js','p6j-crm.js','p6k-sellonfc.js','p4-mods.js','p4f-rrhh.js','p4c-compras.js','p4d-compras-ui.js','p4e-factura.js','p4b-online.js','p7a-dash.js','p7b-charts.js','p7c-scale.js','p7-devices.js','p7d-nfc.js','p8-legal.js','p9-cloud.js','p9b-arca.js','p9c-tiendanube.js','p5c-menusec.js','p5b-store.js','p5d-cscreen.js','p5-menu-boot.js']
 parts=[p for p in parts if os.path.exists(p)]
 if PROFILE in('gym','nc'): parts.insert(parts.index('p5c-menusec.js'),'p11-gym.js')
 # V26.37 · Centro Inteligente (p10-centro.js): módulo aislado.
@@ -156,10 +156,15 @@ def gym_brand(h,nc=False):
     h=h.replace('#side a.on{background:var(--gold);color:#1b1100;','#side a.on{background:var(--gold);color:#000;',1)
     h=h.replace('</style>','.btn.gold,.fk.gold,.fk.gold small,.cmp .btn.gold,html[data-theme=dark] .btn.gold,html[data-theme=dark] .fk.gold,html[data-theme=dark] .fk.gold small{color:#000!important}html[data-theme=dark] .cmp-tab.on{color:%s}html[data-theme=dark]{--gold2:%s}\n'%(lt,lt)+GYM_CSS+'\n'+theme+'\n</style>',1)
     # tema del panel: oscuro por defecto y preferencia propia de este sitio (los repositorios comparten el origen raveholding.github.io)
-    h=h.replace("function themePref(){try{const v=localStorage.getItem('rave.theme');return THEMES[v]?v:'auto';}","function themePref(){try{const v=localStorage.getItem('%s');return THEMES[v]?v:'dark';}"%tkey,1)
-    # V27.4 · el botón de tema alterna Claro / Oscuro y guarda en la misma clave que lee
-    h=h.replace("A.themeCycle=()=>{const o=['auto','light','dark'];const n=o[(o.indexOf(themePref())+1)%3];try{localStorage.setItem('rave.theme',n);}","A.themeCycle=()=>{const n=themeEff()==='dark'?'light':'dark';try{localStorage.setItem('%s',n);}"%tkey,1)
-    assert "localStorage.setItem('%s',n)"%tkey in h
+    # tema: claro/oscuro propio de este sitio (origen compartido), arranca en oscuro
+    h=h.replace("localStorage.getItem('rave.theme')","localStorage.getItem('%s')"%tkey).replace("localStorage.setItem('rave.theme',","localStorage.setItem('%s',"%tkey)
+    h=h.replace("return THEMES[v]?v:'auto';}","return THEMES[v]?v:'dark';}",1)
+    if "A.themeSet=" in h:
+        h=h.replace("A.themeCycle=()=>{const o=['light','dark','auto'];","A.themeCycle=()=>{const o=['light','dark'];",1)
+        h=h.replace("A.themeSet({dataset:{t:o[(o.indexOf(themePref())+1)%3]}});};","A.themeSet({dataset:{t:themeEff()==='dark'?'light':'dark'}});};",1)
+    else:
+        h=h.replace("A.themeCycle=()=>{const o=['auto','light','dark'];const n=o[(o.indexOf(themePref())+1)%3];","A.themeCycle=()=>{const n=themeEff()==='dark'?'light':'dark';",1)
+    assert "localStorage.setItem('%s',"%tkey in h
     # reproductor de YouTube embebido dentro del sistema
     h=h.replace("frame-src https://www.google.com;","frame-src https://www.google.com https://www.youtube-nocookie.com;",1)
 
@@ -190,7 +195,7 @@ def gym_brand(h,nc=False):
         h=h.replace("'<span class=\"demo-b\">DEMO DE EVALUACIÓN</span>'","''")
         h=h.replace('Demo de evaluación. Usuarios de prueba:','Usuarios iniciales (cambiá los PIN en Usuarios y permisos):')
     return h
-GYM_CSS='''.g-idle{border:2px dashed var(--line,#ccc);border-radius:14px;padding:1.2rem;text-align:center;display:flex;flex-direction:column;gap:.3rem}
+GYM_CSS='''.th-seg [data-t=auto]{display:none!important}.g-idle{border:2px dashed var(--line,#ccc);border-radius:14px;padding:1.2rem;text-align:center;display:flex;flex-direction:column;gap:.3rem}
 .g-gate{border-radius:14px;padding:1rem 1.1rem;border:2px solid}.g-gate.ok{background:var(--okbg);border-color:var(--ok);color:var(--ok)}.g-gate.warn{background:var(--warnbg);border-color:#c98a00;color:#8a5a00}.g-gate.bad{background:var(--redbg);border-color:var(--red);color:var(--red)}.g-gate.mute{border-color:var(--line,#ccc)}
 html[data-theme=dark] .g-gate.warn{color:#f3c76a}.g-gt{font-weight:800;letter-spacing:.08em;font-size:.85rem}.g-gn{font-weight:700;font-size:1.6rem}.g-gate ul{margin:.4rem 0 0;padding-left:1.1rem}
 .g-meter{height:8px;border-radius:99px;background:rgba(127,127,127,.22);overflow:hidden;margin:.3rem 0}.g-meter i{display:block;height:100%;background:var(--gold);border-radius:99px}.g-meter.full i{background:var(--red)}

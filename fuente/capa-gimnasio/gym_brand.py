@@ -36,10 +36,15 @@ def gym_brand(h,nc=False):
     h=h.replace('#side a.on{background:var(--gold);color:#1b1100;','#side a.on{background:var(--gold);color:#000;',1)
     h=h.replace('</style>','.btn.gold,.fk.gold,.fk.gold small,.cmp .btn.gold,html[data-theme=dark] .btn.gold,html[data-theme=dark] .fk.gold,html[data-theme=dark] .fk.gold small{color:#000!important}html[data-theme=dark] .cmp-tab.on{color:%s}html[data-theme=dark]{--gold2:%s}\n'%(lt,lt)+GYM_CSS+'\n'+theme+'\n</style>',1)
     # tema del panel: oscuro por defecto y preferencia propia de este sitio (los repositorios comparten el origen raveholding.github.io)
-    h=h.replace("function themePref(){try{const v=localStorage.getItem('rave.theme');return THEMES[v]?v:'auto';}","function themePref(){try{const v=localStorage.getItem('%s');return THEMES[v]?v:'dark';}"%tkey,1)
-    # V27.4 · el botón de tema alterna Claro / Oscuro y guarda en la misma clave que lee
-    h=h.replace("A.themeCycle=()=>{const o=['auto','light','dark'];const n=o[(o.indexOf(themePref())+1)%3];try{localStorage.setItem('rave.theme',n);}","A.themeCycle=()=>{const n=themeEff()==='dark'?'light':'dark';try{localStorage.setItem('%s',n);}"%tkey,1)
-    assert "localStorage.setItem('%s',n)"%tkey in h
+    # tema: claro/oscuro propio de este sitio (origen compartido), arranca en oscuro
+    h=h.replace("localStorage.getItem('rave.theme')","localStorage.getItem('%s')"%tkey).replace("localStorage.setItem('rave.theme',","localStorage.setItem('%s',"%tkey)
+    h=h.replace("return THEMES[v]?v:'auto';}","return THEMES[v]?v:'dark';}",1)
+    if "A.themeSet=" in h:
+        h=h.replace("A.themeCycle=()=>{const o=['light','dark','auto'];","A.themeCycle=()=>{const o=['light','dark'];",1)
+        h=h.replace("A.themeSet({dataset:{t:o[(o.indexOf(themePref())+1)%3]}});};","A.themeSet({dataset:{t:themeEff()==='dark'?'light':'dark'}});};",1)
+    else:
+        h=h.replace("A.themeCycle=()=>{const o=['auto','light','dark'];const n=o[(o.indexOf(themePref())+1)%3];","A.themeCycle=()=>{const n=themeEff()==='dark'?'light':'dark';",1)
+    assert "localStorage.setItem('%s',"%tkey in h
     # reproductor de YouTube embebido dentro del sistema
     h=h.replace("frame-src https://www.google.com;","frame-src https://www.google.com https://www.youtube-nocookie.com;",1)
 
@@ -70,7 +75,7 @@ def gym_brand(h,nc=False):
         h=h.replace("'<span class=\"demo-b\">DEMO DE EVALUACIÓN</span>'","''")
         h=h.replace('Demo de evaluación. Usuarios de prueba:','Usuarios iniciales (cambiá los PIN en Usuarios y permisos):')
     return h
-GYM_CSS='''.g-idle{border:2px dashed var(--line,#ccc);border-radius:14px;padding:1.2rem;text-align:center;display:flex;flex-direction:column;gap:.3rem}
+GYM_CSS='''.th-seg [data-t=auto]{display:none!important}.g-idle{border:2px dashed var(--line,#ccc);border-radius:14px;padding:1.2rem;text-align:center;display:flex;flex-direction:column;gap:.3rem}
 .g-gate{border-radius:14px;padding:1rem 1.1rem;border:2px solid}.g-gate.ok{background:var(--okbg);border-color:var(--ok);color:var(--ok)}.g-gate.warn{background:var(--warnbg);border-color:#c98a00;color:#8a5a00}.g-gate.bad{background:var(--redbg);border-color:var(--red);color:var(--red)}.g-gate.mute{border-color:var(--line,#ccc)}
 html[data-theme=dark] .g-gate.warn{color:#f3c76a}.g-gt{font-weight:800;letter-spacing:.08em;font-size:.85rem}.g-gn{font-weight:700;font-size:1.6rem}.g-gate ul{margin:.4rem 0 0;padding-left:1.1rem}
 .g-meter{height:8px;border-radius:99px;background:rgba(127,127,127,.22);overflow:hidden;margin:.3rem 0}.g-meter i{display:block;height:100%;background:var(--gold);border-radius:99px}.g-meter.full i{background:var(--red)}
