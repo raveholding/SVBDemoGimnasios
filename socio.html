@@ -540,7 +540,7 @@ function inicio(){
   const st=D.st||['ok','Al día'],first=D.n.split(' ')[0],sl=D.sl||[0,[]],rw=sl[1]||[],next=rw.find(r=>r[1]>sl[0])||rw[rw.length-1];
   const need=st[0]!=='ok';
   return '<section class="glass"><div class="eyebrow">Hola</div><h1>'+esc(first)+'</h1><div class="row" style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap;align-items:center"><span class="pill '+esc(st[0])+'">'+esc(st[1])+'</span><span class="meta">'+esc(D.p)+' · paga hasta '+dmy(D.d)+'</span></div></section>'+
-  '<section class="glass cred"><div class="eyebrow">Tu credencial de acceso</div><div class="qr" id="qr">'+esc(D.c)+'</div><div class="code">'+esc(D.c)+'</div><p class="meta">Mostrá este QR en el lector de la entrada. Subí el brillo de la pantalla para que lea más rápido.</p></section>'+
+  '<section class="glass cred"><div class="eyebrow">Tu credencial de acceso</div><div class="qr" id="qr">'+esc(D.c)+'</div><div class="code">'+esc(D.c)+'</div>'+(D.qk?'<div class="meta" id="qr-t" aria-live="off" style="margin-top:6px">QR dinámico · se renueva solo</div>':'')+(D.cr!=null?'<p class="meta" style="margin-top:6px">Créditos en tu pack: <b>'+D.cr+'</b></p>':'')+(D.lk&&D.lk[0]?'<p class="meta" style="margin-top:6px">Tu locker: <b>'+esc(D.lk[0])+'</b> · hasta el '+dmy(D.lk[1])+'</p>':'')+'<p class="meta">Mostrá este QR en el lector de la entrada. Subí el brillo de la pantalla para que lea más rápido.</p></section>'+
   '<section class="glass" style="display:flex;flex-direction:column;gap:12px;'+(need?'border-color:var(--amber)':'')+'"><h2>'+(need?'Renová tu cuota':'Tu cuota')+'</h2><p class="meta" style="font-size:15px">'+esc(D.p)+' · '+money(D.pr||0)+' por mes. '+(need?'Pagá con el link o transferí al alias y avisá que pagaste: la cuota se renueva cuando se confirma el pago.':'Podés adelantar el pago cuando quieras: se suma desde tu vencimiento.')+'</p>'+
   '<div class="row" style="display:flex;gap:10px;flex-wrap:wrap">'+(D.pay&&D.pay[0]?'<a class="btn" target="_blank" rel="noopener" href="'+esc(D.pay[0])+'">Pagar con Mercado Pago</a>':'')+(D.pay&&D.pay[1]?'<button class="btn ghost" type="button" data-a="alias">Copiar alias '+esc(D.pay[1])+'</button>':'')+'<a class="btn ghost" target="_blank" rel="noopener" href="'+waGym('Hola, soy '+D.n+' ('+D.c+'). Ya pagué mi cuota de '+D.p+'.')+'">Avisar que pagué</a></div></section>'+
   '<div class="kpis"><section class="glass kpi"><div class="eyebrow">Racha</div><div class="v">'+(D.k||0)+'</div><div class="f">semanas seguidas entrenando</div></section><section class="glass kpi"><div class="eyebrow">Este mes</div><div class="v">'+(D.ma||0)+'</div><div class="f">días de entrenamiento</div></section></div>'+
@@ -584,10 +584,26 @@ function avisos(){
 function footer(){
   return '<footer class="glass"><div class="devfoot"><div class="row" style="display:flex;gap:12px;align-items:center;flex:1 1 260px"><img src="'+DEV.logo+'" width="150" height="47" alt="Logo de Vincular Business"><div><div class="eyebrow">App desarrollada por</div><b>'+DEV.name+'</b><div class="meta" style="font-size:13px"><i>“Tu idea, en buenas manos.”</i> · <a href="https://www.vincularbusiness.com.ar/" target="_blank" rel="noopener" style="color:inherit">vincularbusiness.com.ar</a> · '+DEV.mail+'</div></div></div><a class="btn sm ghost" target="_blank" rel="noopener" href="https://wa.me/'+DEV.wa+'?text='+encodeURIComponent('Hola Vincular Business, vi la app de socios de '+D.b+' y quiero una para mi negocio.')+'">Celular '+DEV.waTxt+'</a></div></footer>';
 }
+/* QR dinámico: código temporal (30 s, válido 60 s) firmado con la clave de este socio; el sistema lo verifica sin internet */
+function sha256(b){const K=[0x428a2f98,0x71374491,0xb5c0fbcf,0xe9b5dba5,0x3956c25b,0x59f111f1,0x923f82a4,0xab1c5ed5,0xd807aa98,0x12835b01,0x243185be,0x550c7dc3,0x72be5d74,0x80deb1fe,0x9bdc06a7,0xc19bf174,0xe49b69c1,0xefbe4786,0x0fc19dc6,0x240ca1cc,0x2de92c6f,0x4a7484aa,0x5cb0a9dc,0x76f988da,0x983e5152,0xa831c66d,0xb00327c8,0xbf597fc7,0xc6e00bf3,0xd5a79147,0x06ca6351,0x14292967,0x27b70a85,0x2e1b2138,0x4d2c6dfc,0x53380d13,0x650a7354,0x766a0abb,0x81c2c92e,0x92722c85,0xa2bfe8a1,0xa81a664b,0xc24b8b70,0xc76c51a3,0xd192e819,0xd6990624,0xf40e3585,0x106aa070,0x19a4c116,0x1e376c08,0x2748774c,0x34b0bcb5,0x391c0cb3,0x4ed8aa4a,0x5b9cca4f,0x682e6ff3,0x748f82ee,0x78a5636f,0x84c87814,0x8cc70208,0x90befffa,0xa4506ceb,0xbef9a3f7,0xc67178f2];
+ let h=[0x6a09e667,0xbb67ae85,0x3c6ef372,0xa54ff53a,0x510e527f,0x9b05688c,0x1f83d9ab,0x5be0cd19];const l=b.length,n=((l+9+63)>>6)<<6,m=new Uint8Array(n);m.set(b);m[l]=0x80;const bl=l*8;for(let i=0;i<4;i++)m[n-1-i]=(bl>>>(8*i))&255;
+ const w=new Uint32Array(64),r=(x,y)=>(x>>>y)|(x<<(32-y));for(let o=0;o<n;o+=64){for(let i=0;i<16;i++)w[i]=(m[o+4*i]<<24)|(m[o+4*i+1]<<16)|(m[o+4*i+2]<<8)|m[o+4*i+3];
+  for(let i=16;i<64;i++){const s0=r(w[i-15],7)^r(w[i-15],18)^(w[i-15]>>>3),s1=r(w[i-2],17)^r(w[i-2],19)^(w[i-2]>>>10);w[i]=(w[i-16]+s0+w[i-7]+s1)|0;}
+  let[a,bb,c,d,e,f,g,hh]=h;for(let i=0;i<64;i++){const S1=r(e,6)^r(e,11)^r(e,25),ch=(e&f)^(~e&g),t1=(hh+S1+ch+K[i]+w[i])|0,S0=r(a,2)^r(a,13)^r(a,22),mj=(a&bb)^(a&c)^(bb&c),t2=(S0+mj)|0;hh=g;g=f;f=e;e=(d+t1)|0;d=c;c=bb;bb=a;a=(t1+t2)|0;}
+  h=[h[0]+a|0,h[1]+bb|0,h[2]+c|0,h[3]+d|0,h[4]+e|0,h[5]+f|0,h[6]+g|0,h[7]+hh|0];}
+ const out=new Uint8Array(32);h.forEach((v,i)=>{out[4*i]=v>>>24;out[4*i+1]=(v>>>16)&255;out[4*i+2]=(v>>>8)&255;out[4*i+3]=v&255;});return out;}
+function hmac(k,msg){if(k.length>64)k=sha256(k);const kk=new Uint8Array(64);kk.set(k);const ip=new Uint8Array(64+msg.length),op=new Uint8Array(96);for(let i=0;i<64;i++){ip[i]=kk[i]^0x36;op[i]=kk[i]^0x5c;}ip.set(msg,64);op.set(sha256(ip),64);return sha256(op);}
+const b64u=s=>{s=String(s).replace(/-/g,'+').replace(/_/g,'/');const bin=atob(s+'==='.slice((s.length+3)%4));return Uint8Array.from(bin,ch=>ch.charCodeAt(0));};
+function totp(key,step){const m=new Uint8Array(8);let x=step;for(let i=7;i>=0;i--){m[i]=x&255;x=Math.floor(x/256);}const h=hmac(b64u(key),m),o=h[31]&15;const v=((h[o]&127)<<24)|(h[o+1]<<16)|(h[o+2]<<8)|h[o+3];return String(v%1e6).padStart(6,'0');}
+
+var qrLast='';window.qrText=function(){return qrText()};function qrText(){if(!D.qk)return D.c;return D.c+'.'+totp(D.qk,Math.floor(Date.now()/3e4));}
+function drawQR(force){const el=$('#qr');if(!el)return;const tx=qrText();if(!force&&tx===qrLast){const t=$('#qr-t');if(t&&D.qk)t.textContent='QR dinámico · cambia en '+(30-Math.floor(Date.now()/1e3)%30)+' s';return;}qrLast=tx;
+  if(window.QR){try{el.innerHTML=QR.svg(tx,5,1);const g=el.querySelector('svg');if(g){g.setAttribute('width','216');g.setAttribute('height','216');}}catch(e){el.textContent=tx}}else if(window.QRCode){el.innerHTML='';try{new QRCode(el,{text:tx,width:216,height:216,colorDark:'#04122a',colorLight:'#ffffff'})}catch(e){el.textContent=tx}}else el.textContent=tx;const t=$('#qr-t');if(t&&D.qk)t.textContent='QR dinámico · cambia en '+(30-Math.floor(Date.now()/1e3)%30)+' s';}
+setInterval(function(){if(ui.tab==='inicio'&&D&&D.qk)drawQR(false);},1000);
 const V={inicio:inicio,rutina:rutina,progreso:progreso,clases:clases,avisos:avisos};
 function render(){
   $('#app').innerHTML=header()+V[ui.tab]()+footer();nav();
-  if(ui.tab==='inicio'){const el=$('#qr');if(el&&window.QR){try{el.innerHTML=QR.svg(D.c,5,1);const g=el.querySelector('svg');if(g){g.setAttribute('width','216');g.setAttribute('height','216');}}catch(e){el.textContent=D.c}}}
+  if(ui.tab==='inicio')drawQR(true);
 }
 function timerHtml(){const t=ui.timer;if(!t){$('#timer-host').innerHTML='';return}const left=Math.max(0,Math.ceil((t.end-Date.now())/1000));
   $('#timer-host').innerHTML='<div class="timer" role="timer" aria-live="off"><span>Descanso</span><b>'+Math.floor(left/60)+':'+pad(left%60)+'</b><button type="button" data-a="restStop">'+(left?'Saltar':'Listo')+'</button></div>';
@@ -619,5 +635,15 @@ document.addEventListener('click',function(e){var b=e.target.closest('[data-a="v
  o.appendChild(box);document.body.appendChild(o);var close=function(){o.remove();document.removeEventListener('keydown',k);};var k=function(ev){if(ev.key==='Escape')close();};document.addEventListener('keydown',k);
  box.querySelector('button').addEventListener('click',close);o.addEventListener('click',function(ev){if(ev.target===o)close();});},true);})();
 
+</script>
+<div id="pwa-bar" hidden style="position:fixed;left:12px;right:12px;bottom:84px;z-index:50;display:flex;gap:10px;align-items:center;padding:12px 14px;border-radius:16px;background:#111;color:#fff;box-shadow:0 12px 30px rgba(0,0,0,.45);font:15px/1.35 system-ui,sans-serif"><span style="flex:1" id="pwa-tx">Instalá la app en tu celular: abre al toque y funciona sin internet.</span><button type="button" id="pwa-ok" style="min-height:44px;padding:0 14px;border-radius:12px;border:0;font-weight:700;cursor:pointer">Instalar</button><button type="button" id="pwa-no" aria-label="Cerrar" style="min-width:44px;min-height:44px;border-radius:12px;border:1px solid #333;background:none;color:#fff;font-size:20px;cursor:pointer">×</button></div>
+<script>
+;(function(){var ev=null,bar=document.getElementById('pwa-bar'),k='pwa-no-'+location.pathname;var off=function(){try{return localStorage.getItem(k)}catch(e){return null}};
+var standalone=window.matchMedia&&matchMedia('(display-mode: standalone)').matches||navigator.standalone;if(standalone||off())return;
+var acc=getComputedStyle(document.documentElement).getPropertyValue('--teal').trim()||'#c6f135';document.getElementById('pwa-ok').style.background=acc;
+window.addEventListener('beforeinstallprompt',function(e){e.preventDefault();ev=e;bar.hidden=false;});
+var ios=/iphone|ipad|ipod/i.test(navigator.userAgent)&&!window.MSStream;if(ios){setTimeout(function(){document.getElementById('pwa-tx').innerHTML='Para instalarla: tocá <b>Compartir</b> y después <b>Agregar a inicio</b>.';document.getElementById('pwa-ok').hidden=true;bar.hidden=false;},2500);}
+document.getElementById('pwa-ok').addEventListener('click',function(){if(!ev)return;ev.prompt();ev.userChoice.then(function(){bar.hidden=true;ev=null;});});
+document.getElementById('pwa-no').addEventListener('click',function(){bar.hidden=true;try{localStorage.setItem(k,'1')}catch(e){}});window.addEventListener('appinstalled',function(){bar.hidden=true;});})();
 </script>
 </body></html>

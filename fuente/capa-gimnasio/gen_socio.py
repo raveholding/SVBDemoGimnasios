@@ -16,7 +16,7 @@ s=re.sub(r"const LOGO='data:image/[^']+'","const LOGO='%s'"%logo,s,count=1)
 s=s.replace('<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>','<script>\n'+qr+'\n</script>')
 s=s.replace("if(ui.tab==='inicio'){const el=$('#qr');if(el&&window.QRCode){el.innerHTML='';try{new QRCode(el,{text:D.c,width:216,height:216,colorDark:'#04122a',colorLight:'#ffffff'})}catch(e){el.textContent=D.c}}}",
             "if(ui.tab==='inicio'){const el=$('#qr');if(el&&window.QR){try{el.innerHTML=QR.svg(D.c,5,1);const g=el.querySelector('svg');if(g){g.setAttribute('width','216');g.setAttribute('height','216');}}catch(e){el.textContent=D.c}}}")
-assert 'QR.svg(D.c' in s and 'cdnjs' not in s
+assert 'QR.svg(' in s and 'cdnjs' not in s
 s=re.sub(r'<title>[^<]*</title>','<title>%s</title>'%title,s,count=1)
 # claves propias de este sitio (todos los repositorios comparten el origen raveholding.github.io)
 for k in ["'mi-socio'","'mi-done-'","'mi-log'","'mi-theme'"]:
