@@ -12,9 +12,9 @@
 var path=(location.pathname.replace(/[^/]*$/,'')||'/'),ck=function(k){return 'vbls_'+encodeURIComponent(k).replace(/%/g,'_');},
 rd=function(k){var n=ck(k)+'=',a=document.cookie.split('; ');for(var i=0;i<a.length;i++)if(a[i].indexOf(n)===0){try{return decodeURIComponent(a[i].slice(n.length));}catch(e){return null;}}return null;},
 wr=function(k,v){document.cookie=ck(k)+'='+encodeURIComponent(v)+';path='+path+';max-age=31536000;SameSite=Lax';};
-P.setItem=function(k,v){try{si.call(this,k,v);if(this===window.localStorage&&rd(k)!==null)document.cookie=ck(k)+'=;path='+path+';max-age=0';}catch(e){if(this===window.localStorage&&String(v).length<=1500&&location.protocol!=='file:'){wr(k,String(v));return;}throw e;}};
-P.getItem=function(k){var v=gi.call(this,k);if(v===null&&this===window.localStorage){var c=rd(k);if(c!==null)return c;}return v;};
-P.removeItem=function(k){ri.call(this,k);if(this===window.localStorage&&rd(k)!==null)document.cookie=ck(k)+'=;path='+path+';max-age=0';};}catch(e){}})();</script><script>window.RAVE_BUILD={"ver": "2026-11-12 13:03 UTC", "variant": "demo", "db": "rave-gym-demo-v1", "publicUrl": "https://raveholding.github.io/SVBDemoGimnasios/", "profile": "gym"};window.RAVE_CLOUD={"url": "", "key": "", "slug": ""};</script>
+P.setItem=function(k,v){try{si.call(this,k,v);if(this===window.localStorage&&rd(k)!==null)document.cookie=ck(k)+'=;path='+path+';max-age=0';}catch(e){if(this===window.localStorage&&String(v).length<=1500&&location.protocol!=='file:'){try{ri.call(this,k);}catch(x){}wr(k,String(v));return;}throw e;}};
+P.getItem=function(k){if(this===window.localStorage){var c=rd(k);if(c!==null)return c;}return gi.call(this,k);};
+P.removeItem=function(k){ri.call(this,k);if(this===window.localStorage&&rd(k)!==null)document.cookie=ck(k)+'=;path='+path+';max-age=0';};}catch(e){}})();</script><script>window.RAVE_BUILD={"ver": "2026-11-12 13:14 UTC", "variant": "demo", "db": "rave-gym-demo-v1", "publicUrl": "https://raveholding.github.io/SVBDemoGimnasios/", "profile": "gym"};window.RAVE_CLOUD={"url": "", "key": "", "slug": ""};</script>
 <style>
 :root{--ink:#111111;--gold:#c6f135;--gold2:#9fca12;--bg:#f6f3ee;--card:#fff;--line:#e6e0d6;--mut:#6d675f;--red:#c0392b;--redbg:#fdecea;--ok:#1e7a46;--okbg:#e6f4ec;--warnbg:#fff4dc;--r:16px}
 *{box-sizing:border-box}
@@ -9413,10 +9413,11 @@ const gYt=n=>'https://www.youtube.com/results?search_query='+encodeURIComponent(
 /* V27.4 · los videos se ven dentro del sistema (reproductor embebido), nunca se sale a otra página */
 const gYtId=u=>{const m=String(u||'').match(/^https:\/\/(?:www\.|m\.)?(?:youtube\.com\/(?:watch\?(?:.*&)?v=|shorts\/|embed\/|live\/)|youtu\.be\/)([\w-]{11})/i);return m?m[1]:'';};
 const gYtOk=u=>!u||!!gYtId(u);
-function gPlayer(id){return `<div style="position:relative;padding-top:56.25%;border-radius:14px;overflow:hidden;background:#000"><iframe src="https://www.youtube-nocookie.com/embed/${id}?rel=0&modestbranding=1&playsinline=1" title="Video del ejercicio" allow="accelerometer; encrypted-media; gyroscope; picture-in-picture; fullscreen" allowfullscreen referrerpolicy="strict-origin-when-cross-origin" style="position:absolute;inset:0;width:100%;height:100%;border:0"></iframe></div>`;}
+const gIsShort=u=>/\/shorts\//i.test(String(u||''));
+function gPlayer(id,vert){return `<div style="position:relative;${vert?'width:min(100%,380px);margin:0 auto;aspect-ratio:9/16;max-height:72vh':'padding-top:56.25%'};border-radius:14px;overflow:hidden;background:#000"><iframe src="https://www.youtube-nocookie.com/embed/${id}?rel=0&modestbranding=1&playsinline=1" title="Video del ejercicio" allow="accelerometer; encrypted-media; gyroscope; picture-in-picture; fullscreen" allowfullscreen referrerpolicy="strict-origin-when-cross-origin" style="position:absolute;inset:0;width:100%;height:100%;border:0"></iframe></div>`;}
 A.gVideo=el=>{const k=el.dataset.k,id=el.dataset.id,o=k==='mq'?gMq(id):gEx(id);if(!o)return;const v=gYtId(o.video),ed=can('gym_admin')||can('gym_train');
  const tip=k==='mq'?(o.notes||''):(o.tip||'');
- modal((k==='mq'?'Cómo usar: ':'Técnica: ')+o.name,(v?gPlayer(v):`<div class="card" style="text-align:center;padding:1.2rem"><p style="margin:.2rem 0"><b>Todavía no hay video cargado para este ${k==='mq'?'equipo':'ejercicio'}.</b></p><p class="sm mut" style="margin:0">Pegá abajo el enlace de YouTube y queda guardado: se reproduce acá mismo y en la app del ${GW().s}.</p></div>`)+
+ modal((k==='mq'?'Cómo usar: ':'Técnica: ')+o.name,(v?gPlayer(v,gIsShort(o.video)):`<div class="card" style="text-align:center;padding:1.2rem"><p style="margin:.2rem 0"><b>Todavía no hay video cargado para este ${k==='mq'?'equipo':'ejercicio'}.</b></p><p class="sm mut" style="margin:0">Pegá abajo el enlace de YouTube y queda guardado: se reproduce acá mismo y en la app del ${GW().s}.</p></div>`)+
  (tip?`<p style="margin:.8rem 0 0"><b>Indicación:</b> ${esc(tip)}</p>`:'')+
  (ed?`<label for="gv-u" style="margin-top:.8rem">Enlace de YouTube</label><input id="gv-u" value="${esc(o.video||'')}" placeholder="https://www.youtube.com/watch?v=…">`:''),
  ed?{okText:'Guardar video',cancelText:'Cerrar',onOk:w=>{const u=val('gv-u').trim();if(!gYtOk(u))return w._err('Tiene que ser un enlace de un video de YouTube (youtube.com/watch?v=… o youtu.be/…).'),false;o.video=u;audit(k==='mq'?'GYM_EQUIPO_VIDEO':'GYM_EJERCICIO_VIDEO',o.name);save();toast(u?'Video guardado.':'Video quitado.');rerender();}}:{ok:false,cancelText:'Cerrar'});};
@@ -9451,8 +9452,14 @@ function gymCatalogNC(t){
   ['Rotación con banda','core',['eq3'],[],'Gira el tronco, no la cadera.'],['HIIT 40/20 con peso corporal','cardio',[],['rodilla'],'40 s de trabajo y 20 s de pausa, 6 rondas.'],['Intervalos en bicicleta de aire','cardio',['eq8'],[],'20 s fuerte y 40 s suave.'],
   ['Circuito con kettlebell','cardio',['eq2'],['lumbar'],'Swing, goblet y remo, sin pausa entre ejercicios.']];
  return gymMkCat(t,MQ,EX);}
+/* V27.7 · videos cortos de técnica para la demo (YouTube Shorts insertables). El entrenador los puede cambiar o quitar. */
+const GVID={'sentadilla con barra':'qN4tf1M6UGk','sentadilla goblet':'_k4IXw5bGmc','prensa':'voXz7k7PXIA','hip thrust':'wxWIen6XQ8g','hip thrust con banco':'wxWIen6XQ8g',
+ 'peso muerto rumano con mancuernas':'jmMu_dVH3i8','peso muerto rumano':'UgqrPwoTick','press de banca con barra':'Sb4y8gASMNk','flexiones de brazos':'ZeDUsPI8Ufc','jalón al pecho':'IYVK1-DXBBg',
+ 'remo con mancuerna a una mano':'tfUjhPbYRVg','remo con mancuerna':'tfUjhPbYRVg','elevaciones laterales':'uafHNJgATxg','plancha':'ysX1CpHKGCo','curl de bíceps con mancuernas':'uzdLzdGtamc'};
+const gVidFor=n=>{const id=GVID[String(n||'').trim().toLowerCase()];return id?'https://www.youtube.com/shorts/'+id:'';};
+function gVidSeed(){try{const G0=S.gym;if(!G0||G0.vidSeed)return;(G0.ex||[]).forEach(e=>{if(!e.video)e.video=gVidFor(e.name);});(G0.mq||[]).forEach(q=>{if(!q.video&&/prensa/i.test(q.name))q.video=gVidFor('prensa');if(!q.video&&/jal[oó]n/i.test(q.name))q.video=gVidFor('jalón al pecho');});G0.vidSeed=1;save();}catch(e){}}
 function gymMkCat(t,MQ,EX){return{mq:MQ.map(q=>({id:q[0],name:q[1],zone:q[2],last:addDays(t,q[3]),every:q[4],state:q[5],video:'',notes:q[5]==='rep'?'Esperando el repuesto del proveedor (ejemplo).':'',log:[{date:addDays(t,q[3]),txt:'Mantenimiento preventivo (ejemplo)',cost:0}]})),
- ex:EX.map((e,i)=>({id:'ex'+String(i+1).padStart(2,'0'),name:e[0],cat:e[1],mach:e[2],avoid:e[3],tip:e[4],video:''}))};}
+ ex:EX.map((e,i)=>({id:'ex'+String(i+1).padStart(2,'0'),name:e[0],cat:e[1],mach:e[2],avoid:e[3],tip:e[4],video:gVidFor(e[0])}))};}
 
 /* ---------- entrenador inteligente: rutina por reglas (objetivo, nivel, días, lesiones, equipos operativos, mediciones) ---------- */
 const GRT_TPL={2:[['Día A · Cuerpo completo',['legs','push','pull','hinge','core','arms']],['Día B · Cuerpo completo',['hinge','pull','push','legs','core','shoulders']]],
@@ -9800,7 +9807,7 @@ A.gSlotPres=el=>{const c=gCust(el.dataset.id);if(!c)return;const r=gProcess(c,'s
 /* ---------- rutinas / programas ---------- */
 let gR={cust:'',draft:null,shift:0,cat:''};
 A.gRtFor=el=>{$$('#modal-root .ov').forEach(o=>o.remove());gR.cust=el.dataset.id;gR.draft=null;go('grutinas');rerender();};
-reg('grutinas',isNC()?'Programas':'Rutinas','list','gym_train',()=>{const act=gActives().sort((a,b)=>gName(a).localeCompare(gName(b),'es'));const sel=gCust(gR.cust)||act[0];const m=sel?gm(sel.id):null,d=gR.draft;
+reg('grutinas',isNC()?'Programas':'Rutinas','list','gym_train',()=>{gVidSeed();const act=gActives().sort((a,b)=>gName(a).localeCompare(gName(b),'es'));const sel=gCust(gR.cust)||act[0];const m=sel?gm(sel.id):null,d=gR.draft;
  const list=G().routines.filter(r=>!gR.cust||r.cust===gR.cust).sort((a,b)=>b.created.localeCompare(a.created)).slice(0,15);const EL=G().ex.filter(e=>!gR.cat||e.cat===gR.cat);
  return`<div class="row"><h1 class="sp">${isNC()?'Programas de entrenamiento':'Rutinas'}</h1><span class="tag">${G().ex.length} ejercicios · ${G().mq.filter(q=>q.state==='ok').length} ${isNC()?'equipos':'máquinas'} operativos</span></div>
  <div class="card"><h3>Entrenador inteligente</h3><p class="sm mut">Arma la ${isNC()?'programación':'rutina'} con reglas de entrenamiento según el objetivo, el nivel, las lesiones, ${isNC()?'el equipamiento disponible y la modalidad':'las máquinas que funcionan'} y la evolución de las mediciones. El profesor la revisa, ajusta las cargas y la asigna.</p>
@@ -9826,7 +9833,7 @@ A.gRtEdit=el=>{$$('#modal-root .ov').forEach(o=>o.remove());const r=G().routines
   const add=val('gre-a'+di);if(add){const P=GRT_PRM[r.goal]||GRT_PRM.salud,lv=Math.max(0,['principiante','intermedio','avanzado'].indexOf(r.level));d.items.push({ex:add,s:P.s[lv],r:P.r,kg:'',rest:P.rest});}});r.auto=false;audit('GYM_RUTINA_EDIT',r.name);save();rerender();toast('Guardado');}});};
 
 /* ---------- máquinas / equipamiento ---------- */
-reg('gmaq',isNC()?'Equipamiento':'Máquinas y mantenimiento','gear','gym_train',()=>{const t=gT(),L=G().mq.slice().sort((a,b)=>(a.state==='ok'?1:0)-(b.state==='ok'?1:0)||gNext(a).localeCompare(gNext(b)));const rep=L.filter(q=>q.state!=='ok'),over=L.filter(q=>q.state==='ok'&&gNext(q)<t),soon=L.filter(q=>q.state==='ok'&&gNext(q)>=t&&gNext(q)<=addDays(t,15));
+reg('gmaq',isNC()?'Equipamiento':'Máquinas y mantenimiento','gear','gym_train',()=>{gVidSeed();const t=gT(),L=G().mq.slice().sort((a,b)=>(a.state==='ok'?1:0)-(b.state==='ok'?1:0)||gNext(a).localeCompare(gNext(b)));const rep=L.filter(q=>q.state!=='ok'),over=L.filter(q=>q.state==='ok'&&gNext(q)<t),soon=L.filter(q=>q.state==='ok'&&gNext(q)>=t&&gNext(q)<=addDays(t,15));
  return`<div class="row"><h1 class="sp">${isNC()?'Equipamiento':'Máquinas y mantenimiento'}</h1><button class="btn gold" data-act="gMqEd" data-id="">+ ${isNC()?'Equipo':'Máquina'}</button></div>
  <div class="grid g4"><div class="card kpi"><span>Equipos</span><b>${L.length}</b><span>registrados</span></div><div class="card kpi"><span>En reparación</span><b>${rep.length}</b><span>quedan fuera de las rutinas nuevas</span></div><div class="card kpi"><span>Mantenimiento vencido</span><b>${over.length}</b><span>${soon.length} más en 15 días</span></div></div>
  <div class="card"><p class="sm mut">Pegá el QR en cada ${isNC()?'equipo':'máquina'}: el ${GW().s} lo escanea y ve el video de cómo usarla.</p><div class="tw"><table><thead><tr><th>${isNC()?'Equipo':'Máquina'}</th><th>Estado</th><th>Último mantenimiento</th><th>Próximo</th><th class="r"></th></tr></thead><tbody>${L.map(q=>{const nx=gNext(q);const st=q.state!=='ok'?'<span class="tag bad">En reparación</span>':nx<t?'<span class="tag bad">Mantenimiento vencido</span>':nx<=addDays(t,15)?`<span class="tag warn">En ${gDiff(t,nx)} días</span>`:'<span class="tag ok">Operativa</span>';
@@ -9861,7 +9868,7 @@ function gArt(k){const A='var(--gold)';const P={
  virtual:`<rect x="46" y="34" width="108" height="70" rx="10" fill="#fff" opacity=".9"/><path d="M86 52v34l28-17z" fill="${A}"/><path d="M80 118h40" stroke="#fff" stroke-width="7" stroke-linecap="round" opacity=".85"/>`,
  chat:`<path d="M50 40h100v60H96l-24 20v-20H50z" fill="#fff" opacity=".9"/><path d="M70 64h60M70 80h36" stroke="${A}" stroke-width="7" stroke-linecap="round"/>`};
  return`<svg viewBox="0 0 200 140" class="g-art" aria-hidden="true" preserveAspectRatio="xMidYMid slice"><defs><linearGradient id="ga${k}" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#2a2f35"/><stop offset="1" stop-color="#0d0f12"/></linearGradient></defs><rect width="200" height="140" fill="url(#ga${k})"/><circle cx="170" cy="20" r="60" fill="var(--gold)" opacity=".10"/>${P[k]||P.barra}</svg>`;}
-reg('ginicio','Inicio','home','gym',()=>{const t=gT(),NC=isNC(),A0=gActives(),sg=gSegments(),cap=+G().cfg.capacity||0,ins=gInside().length,dow=dowOfKey(t);
+reg('ginicio','Inicio','home','gym',()=>{gVidSeed();const t=gT(),NC=isNC(),A0=gActives(),sg=gSegments(),cap=+G().cfg.capacity||0,ins=gInside().length,dow=dowOfKey(t);
  const okN=A0.filter(c=>gm(c.id).due>=t).length,pOk=A0.length?okN/A0.length*100:0,attT=G().att.filter(a=>a.date===t).length;
  const wk=gWeekStart(t),attW=G().att.filter(a=>a.date>=wk).length,avgDay=Math.max(1,Math.round(G().att.filter(a=>a.date>=addDays(t,-21)&&a.date<t).length/18));
  const ms=t.slice(0,8)+'01',cuotas=(G().pays||[]).filter(p=>dkey(p.ts)>=ms).reduce((a,p)=>a+p.amt,0),mrr=A0.reduce((a,c)=>a+gPrice(gPlanOf(gm(c.id))),0);
