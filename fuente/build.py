@@ -134,7 +134,7 @@ def gym_brand(h,nc=False):
         LOC='Mi Gimnasio · demo'
         svg='<svg xmlns="http://www.w3.org/2000/svg" width="320" height="180" viewBox="0 0 320 180"><rect width="320" height="180" rx="22" fill="#151515"/><circle cx="66" cy="90" r="38" fill="none" stroke="#c6f135" stroke-width="14" stroke-dasharray="190 60" transform="rotate(-40 66 90)"/><circle cx="66" cy="90" r="12" fill="#c6f135"/><text x="118" y="86" font-family="Arial,Helvetica,sans-serif" font-size="34" font-weight="800" fill="#ffffff">MI</text><text x="118" y="122" font-family="Arial,Helvetica,sans-serif" font-size="30" font-weight="800" fill="#c6f135">GIMNASIO</text></svg>'
         uri='data:image/svg+xml;base64,'+base64.b64encode(svg.encode()).decode()
-        fonts='<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap">'
+        fonts='<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Poppins:wght@500;600;700;800&display=swap">'
         theme=GYM_THEME; tkey='rave.theme.gym'
     h=re.sub(r'const LOGO_MENU="[^"]*"','const LOGO_MENU="%s"'%uri,h,count=1)
     h=re.sub(r'const LOGO_TICKET="[^"]*"','const LOGO_TICKET="%s"'%uri,h,count=1)
@@ -154,7 +154,7 @@ def gym_brand(h,nc=False):
         h=h.replace(o,n)
     h=h.replace('--gold:#c9963e','--gold:%s'%c2).replace('--gold-deep:#dba854','--gold-deep:%s'%c2)
     h=h.replace('#side a.on{background:var(--gold);color:#1b1100;','#side a.on{background:var(--gold);color:#000;',1)
-    h=h.replace('</style>','.btn.gold,.fk.gold,.fk.gold small,.cmp .btn.gold,html[data-theme=dark] .btn.gold,html[data-theme=dark] .fk.gold,html[data-theme=dark] .fk.gold small{color:#000!important}html[data-theme=dark] .cmp-tab.on{color:%s}html[data-theme=dark]{--gold2:%s}\n'%(lt,lt)+GYM_CSS+'\n'+theme+'\n</style>',1)
+    h=h.replace('</style>','.btn.gold,.fk.gold,.fk.gold small,.cmp .btn.gold,html[data-theme=dark] .btn.gold,html[data-theme=dark] .fk.gold,html[data-theme=dark] .fk.gold small{color:#000!important}html[data-theme=dark] .cmp-tab.on{color:%s}html[data-theme=dark]{--gold2:%s}\n'%(lt,lt)+GYM_CSS+'\n'+theme+'\n'+DS_CSS+("\n#top>b,#side .brand,.total,.vuelto b,#as-dock .as-h b,.cmp fieldset.cmp-card legend,.cmp-total b,.kpi b{font-family:Fraunces,Georgia,serif!important}" if nc else "\nbody{font-family:'Plus Jakarta Sans',Poppins,system-ui,sans-serif!important}#top>b,#side .brand,.total,.vuelto b,#as-dock .as-h b,.cmp fieldset.cmp-card legend,.cmp-total b,.kpi b,.mlogo,.mph{font-family:Poppins,system-ui,sans-serif!important}")+'\n</style>',1)
     # tema del panel: oscuro por defecto y preferencia propia de este sitio (los repositorios comparten el origen raveholding.github.io)
     # V27.6 · el dominio raveholding.github.io es compartido por todas las demos y su localStorage puede llenarse
     # con datos de otras: si una preferencia chica no entra, se guarda en una cookie de ESTE sitio (ruta propia).
@@ -196,7 +196,7 @@ P.removeItem=function(k){ri.call(this,k);if(this===window.localStorage&&rd(k)!==
         doc=open(os.path.join(os.path.dirname(os.path.abspath(__file__)),'capa-gimnasio','p11-pub.html') if os.path.exists('capa-gimnasio/p11-pub.html') else 'p11-pub.html').read()
         V=dict(NAME='Movimiento Inteligente' if nc else 'Gimnasio Demo',KEY='minc' if nc else 'svbgym',NC='true' if nc else 'false',WAFB='5493874484132',
           BG='#060b21' if nc else '#0a0a0a',BG2='#0b1440' if nc else '#121212',CARD='rgba(255,255,255,.06)' if nc else '#121212',
-          ACC='#3de0c5' if nc else '#a3e635',ACC2='#6ff0da' if nc else '#ccff00',
+          ACC='#3de0c5' if nc else '#c6f135',ACC2='#6ff0da' if nc else '#d4ff4a',
           FD="'Fraunces',Georgia,serif" if nc else "'Poppins',system-ui,sans-serif",FU="'Jost',system-ui,sans-serif" if nc else "'Poppins',system-ui,sans-serif",
           BODYBG='radial-gradient(620px 480px at 10% 0%,rgba(61,224,197,.16),transparent 70%),radial-gradient(620px 520px at 95% 30%,rgba(255,106,169,.12),transparent 70%),#060b21' if nc else '#0a0a0a',
           FONTS='<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family='+('Fraunces:wght@600;700;800&family=Jost:wght@400;500;600' if nc else 'Poppins:wght@400;500;600;700;800')+'&display=swap">')
@@ -232,13 +232,43 @@ html:not([data-theme=dark]) .g-acc{color:var(--gold2)}
 .g-pair .card{display:flex;flex-direction:column;gap:.3rem}
 .g-plan{display:flex;gap:.8rem;align-items:center;text-align:left;width:100%;cursor:pointer;color:inherit;font:inherit}.g-plan .g-art{width:84px;height:64px;border-radius:12px;flex:none}.g-plan b{display:block}.g-plan .g-meter{margin-top:.4rem}
 .g-pill{font-size:.72rem;font-weight:700;background:var(--gold);color:#000;border-radius:99px;padding:.2rem .55rem;flex:none}'''
-GYM_THEME='''html[data-theme=dark]{--ink:#f4f4f5;--bg:#161616;--card:#222222;--line:#303030;--mut:#a1a1aa;--selbg:#2a3312;--gold:#c6f135;--gold2:#c6f135;--okbg:#18301c;--ok:#7ee28f}
+DS_CSS='''
+/* ===== Sistema de diseño VB · capa SaaS (V28.2) ===== */
+body{-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+.card{transition:border-color .2s ease,box-shadow .25s ease,transform .2s ease}
+html[data-theme=dark] .card{backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);box-shadow:0 1px 0 rgba(255,255,255,.03) inset}
+.card:hover{border-color:color-mix(in srgb,var(--gold) 28%,var(--line))}
+.grid{gap:1rem}
+.card.kpi{position:relative;overflow:hidden;padding:1.05rem 1.15rem;transition:transform .2s ease,border-color .2s ease,box-shadow .25s ease}
+.card.kpi:hover{transform:translateY(-2px);border-color:color-mix(in srgb,var(--gold) 55%,transparent);box-shadow:0 0 0 1px color-mix(in srgb,var(--gold) 22%,transparent),0 16px 36px -18px color-mix(in srgb,var(--gold) 55%,transparent)}
+.card.kpi b,.kpi b{font-family:inherit!important;font-weight:700;font-variant-numeric:tabular-nums;letter-spacing:-.02em}
+.card.kpi::after{content:"";position:absolute;inset:auto -30% -60% auto;width:70%;height:120%;background:radial-gradient(closest-side,color-mix(in srgb,var(--gold) 14%,transparent),transparent);pointer-events:none}
+.btn{transition:transform .12s ease,background-color .2s ease,border-color .2s ease,box-shadow .2s ease}
+.btn:active{transform:scale(.97)}
+.btn.gold:hover,.btn.on:hover{box-shadow:0 8px 22px -8px color-mix(in srgb,var(--gold) 70%,transparent)}
+:focus-visible{outline:3px solid color-mix(in srgb,var(--gold) 70%,transparent)!important;outline-offset:2px}
+input:focus,select:focus,textarea:focus{border-color:var(--gold)!important;box-shadow:0 0 0 3px color-mix(in srgb,var(--gold) 22%,transparent)!important;outline:none}
+table thead th{font-size:.74rem;letter-spacing:.06em;text-transform:uppercase;color:var(--mut);font-weight:700}
+table tbody tr{transition:background-color .15s ease}
+table tbody tr:hover{background:color-mix(in srgb,var(--gold) 6%,transparent)}
+.tag{border-radius:999px}
+html[data-theme=dark] .dlg{background:rgba(18,18,21,.92)!important;border:1px solid #27272a;backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);box-shadow:0 30px 80px -20px rgba(0,0,0,.7)}
+.ov{backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px)}
+#toast div{backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+html[data-theme=dark] #toast div:not(.e):not(.gp-undo){background:rgba(24,24,27,.92)}
+.ux-tabs a{transition:color .2s ease,border-color .2s ease}
+.gp-live{display:inline-block;width:9px;height:9px;border-radius:50%;background:var(--ok,#22c55e);box-shadow:0 0 0 0 color-mix(in srgb,var(--ok,#22c55e) 60%,transparent);animation:gpPulse 1.8s infinite;margin-right:.4rem;vertical-align:middle}
+@keyframes gpPulse{70%{box-shadow:0 0 0 9px transparent}100%{box-shadow:0 0 0 0 transparent}}
+.gp-feed{list-style:none;margin:.5rem 0 0;padding:0;display:flex;flex-direction:column;gap:.35rem}.gp-feed li{display:flex;gap:.5rem;align-items:center;font-size:.86rem}.gp-feed li span:first-child{opacity:.6;font-variant-numeric:tabular-nums;min-width:3.2em}
+@media (prefers-reduced-motion:reduce){.card,.card.kpi,.btn,table tbody tr,.gp-live{transition:none!important;animation:none!important}.card.kpi:hover{transform:none}}
+'''
+GYM_THEME='''html[data-theme=dark]{--ink:#fafafa;--bg:#09090b;--card:rgba(24,24,27,.72);--line:#27272a;--mut:#a1a1aa;--selbg:#2a3312;--gold:#c6f135;--gold2:#c6f135;--okbg:#18301c;--ok:#7ee28f}
 html{--gold:#c6f135}html:not([data-theme=dark]){--gold2:#5b7a00}
-#side,html[data-theme=dark] #side{background:#121212!important}
+#side,html[data-theme=dark] #side{background:#0c0c0e!important;border-right:1px solid #1f1f23}
 #side a{border-radius:12px}#side a.on,#side a.on:hover{background:var(--gold)!important;color:#000!important}
 .ux-pos-btn{box-shadow:0 6px 18px rgba(198,241,53,.22)!important}
-html[data-theme=dark] #top{background:#161616!important;border-color:#262626!important}
-.card{border-radius:18px}html[data-theme=dark] .card{border-color:#2a2a2a}
+html[data-theme=dark] #top{background:rgba(9,9,11,.82)!important;border-color:#27272a!important;backdrop-filter:blur(12px)}
+.card{border-radius:18px}html[data-theme=dark] .card{border-color:#27272a}
 h1,h2,h3{font-family:Poppins,system-ui,sans-serif!important;font-weight:700;letter-spacing:-.01em}
 html[data-theme=dark] .ux-tabs a.on{color:var(--gold);border-color:var(--gold)}
 html[data-theme=dark] .btn.on{background:var(--gold);color:#000;border-color:var(--gold)}'''
