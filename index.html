@@ -19,7 +19,7 @@ rd=function(k){var n=ck(k)+'=',a=document.cookie.split('; ');for(var i=0;i<a.len
 wr=function(k,v){document.cookie=ck(k)+'='+encodeURIComponent(v)+';path='+path+';max-age=31536000;SameSite=Lax';};
 P.setItem=function(k,v){try{si.call(this,k,v);if(this===window.localStorage&&rd(k)!==null)document.cookie=ck(k)+'=;path='+path+';max-age=0';}catch(e){if(this===window.localStorage&&String(v).length<=1500&&location.protocol!=='file:'){try{ri.call(this,k);}catch(x){}wr(k,String(v));return;}throw e;}};
 P.getItem=function(k){if(this===window.localStorage){var c=rd(k);if(c!==null)return c;}return gi.call(this,k);};
-P.removeItem=function(k){ri.call(this,k);if(this===window.localStorage&&rd(k)!==null)document.cookie=ck(k)+'=;path='+path+';max-age=0';};}catch(e){}})();</script><script>window.RAVE_BUILD={"ver": "2026-11-13 04:49 UTC", "variant": "demo", "db": "rave-gym-demo-v1", "publicUrl": "https://raveholding.github.io/SVBDemoGimnasios/", "profile": "gym"};window.RAVE_CLOUD={"url": "", "key": "", "slug": ""};</script>
+P.removeItem=function(k){ri.call(this,k);if(this===window.localStorage&&rd(k)!==null)document.cookie=ck(k)+'=;path='+path+';max-age=0';};}catch(e){}})();</script><script>window.RAVE_BUILD={"ver": "2026-11-13 04:50 UTC", "variant": "demo", "db": "rave-gym-demo-v1", "publicUrl": "https://raveholding.github.io/SVBDemoGimnasios/", "profile": "gym"};window.RAVE_CLOUD={"url": "", "key": "", "slug": ""};</script>
 <style>
 :root{--ink:#111111;--gold:#c6f135;--gold2:#9fca12;--bg:#f6f3ee;--card:#fff;--line:#e6e0d6;--mut:#6d675f;--red:#c0392b;--redbg:#fdecea;--ok:#1e7a46;--okbg:#e6f4ec;--warnbg:#fff4dc;--r:16px}
 *{box-sizing:border-box}
@@ -434,6 +434,7 @@ html[data-theme=dark] .rep-cb-b.cobrar{background:#4a2a08;color:#ffc98a}
 .can-mode input{position:absolute;opacity:0;pointer-events:none}.can-mode span{font-size:.85rem;color:var(--mut)}
 .can-ol{list-style:none;padding:0;margin:0;display:grid;gap:.6rem}.can-st{display:grid;grid-template-columns:30px 1fr;gap:.5rem;align-items:start}.can-n{width:28px;height:28px;border-radius:50%;background:var(--gold);color:#1b1100;font-weight:800;display:grid;place-items:center}
 .can-st code,.can-sec code{word-break:break-all;font-size:.82rem}.can-st .row,.can-sec .row{gap:.4rem;flex-wrap:wrap;align-items:center;margin:.25rem 0}.can-sec{border:1px dashed var(--line);border-radius:10px;padding:.5rem .6rem;margin-top:.4rem}
+
 /* V26.71 · detalle de cobros digitales compacto */
 .pd-card .pd-head{gap:.5rem;align-items:center;flex-wrap:nowrap}.pd-sw{position:relative;width:44px;height:24px;flex:none;cursor:pointer}.pd-sw input{position:absolute;opacity:0;width:100%;height:100%;margin:0;cursor:pointer;z-index:1}
 .pd-sw i{position:absolute;inset:0;border-radius:12px;background:var(--line);transition:background .15s}.pd-sw i::after{content:'';position:absolute;top:3px;left:3px;width:18px;height:18px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.3);transition:transform .15s}

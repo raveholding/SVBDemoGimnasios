@@ -25,6 +25,8 @@ Demo de **Sistema Vincular Business** para gimnasios: el sistema completo de rav
 
 ## Código
 
+**V29.1 (2026-11-13):** base Sistema VB V26.71 completa (centro de canales con un clic en Atención al cliente, cobros digitales compactos), panel de negocio ordenado en el celular, cabecera no fija en móvil, app instalable con la marca propia y sin módulos de reparto.
+
 `fuente/` es una copia de la fuente única de Sistema VB (`AlmacenRAVE/fuente`, V26.65) con el módulo `p11-gym.js` y los perfiles `gym` y `nc` en `build.py`. Compilar: `cd fuente && python3 build.py gym ../index.html`. Detalle en `fuente/PROMPT_DEMO_GIMNASIOS.md`.
 
 Desarrollado por **Vincular Business** · Celular (387) 4484132 · https://www.vincularbusiness.com.ar/ · vincularbusiness@gmail.com · *“Tu idea, en buenas manos.”*
