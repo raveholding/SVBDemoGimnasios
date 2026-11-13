@@ -27,7 +27,7 @@ build={'ver':datetime.datetime.now(datetime.timezone.utc).strftime('%Y-%m-%d %H:
 if PROFILE: build['profile']=PROFILE
 cfg='<script>window.RAVE_BUILD=%s;window.RAVE_CLOUD=%s;</script>\n'%(json.dumps(build),json.dumps({'url':url,'key':key,'slug':slug}))
 head=B('p1-head.html')
-head=head.replace("connect-src 'none'","connect-src "+(url if url else "'none'"))
+head=head.replace("connect-src 'none'","connect-src "+((url+' ') if url else '')+"https://ntfy.sh https://nominatim.openstreetmap.org").replace("img-src data: blob:","img-src 'self' data: blob: https://ntfy.sh")  # V26.68: portero SeguridadRave (avisos por ntfy y foto del timbre)
 if V=='cliente':
     # SEO del menú público (V26.33): título, descripción, dirección canónica y datos del local para buscadores.
     # Reemplaza en Google la dirección vieja (raveholding.github.io/menu-rave) por la actual.
@@ -40,7 +40,7 @@ if V=='cliente':
          '<meta property="og:locale" content="es_AR">\n<script type="application/ld+json">%s</script>')%(seo_t,seo_d,pub,seo_t,seo_d,pub,json.dumps(ld,ensure_ascii=False))
     head=head.replace('<title>Sistema RAVE · Almacén y Licorería RAVE — Demo</title>',seo)
 head=head.replace('<style>',cfg+'<style>',1)
-parts=['p2-core.js','p2b-sort.js','p2c-ux.js','p3-ops.js','p3b-pos.js','p3p-payadj.js','p3n-posquick.js','p3c-cash.js','p3q-cortes.js','p3f-transfers.js','p3g-paydetail.js','p3h-expediente.js','p3i-rubcash.js','p3j-combos.js','p3k-owner.js','p3l-kini.js','p3o-solo.js','p3m-payacc.js','p3d-assist.js','p3e-saledetail.js','p3r-oper.js','p6-loyalty.js','p6c-custadmin.js','p6d-cardportable.js','p6e-wallet.js','p6b-wholesale.js','p6f-credito.js','p6g-wacliente.js','p6h-fidel.js','p6i-fiscal.js','p6j-crm.js','p6k-sellonfc.js','p4-mods.js','p4f-rrhh.js','p4c-compras.js','p4d-compras-ui.js','p4e-factura.js','p4b-online.js','p7a-dash.js','p7b-charts.js','p7c-scale.js','p7-devices.js','p7d-nfc.js','p8-legal.js','p9-cloud.js','p9b-arca.js','p9c-tiendanube.js','p5c-menusec.js','p5b-store.js','p5d-cscreen.js','p5-menu-boot.js']
+parts=['p2-core.js','p2b-sort.js','p2c-ux.js','p3-ops.js','p3b-pos.js','p3p-payadj.js','p3n-posquick.js','p3c-cash.js','p3q-cortes.js','p3f-transfers.js','p3g-paydetail.js','p3h-expediente.js','p3i-rubcash.js','p3j-combos.js','p3k-owner.js','p3l-kini.js','p3o-solo.js','p3m-payacc.js','p3d-assist.js','p3e-saledetail.js','p3r-oper.js','p6-loyalty.js','p6c-custadmin.js','p6d-cardportable.js','p6e-wallet.js','p6b-wholesale.js','p6f-credito.js','p6g-wacliente.js','p6h-fidel.js','p6i-fiscal.js','p6j-crm.js','p6k-sellonfc.js','p4-mods.js','p4f-rrhh.js','p4c-compras.js','p4d-compras-ui.js','p4e-factura.js','p4b-online.js','p7a-dash.js','p7b-charts.js','p7c-scale.js','p7-devices.js','p7d-nfc.js','p8-legal.js','p9-cloud.js','p9b-arca.js','p9c-tiendanube.js','p11-portero.js','p12-app.js','p13-reparto.js','p14-clubapp.js','p15-canales.js','p5c-menusec.js','p5b-store.js','p5d-cscreen.js','p5-menu-boot.js']
 parts=[p for p in parts if os.path.exists(p)]
 if PROFILE in('gym','nc'): parts.insert(parts.index('p5c-menusec.js'),'p11-gym.js')
 # V26.37 · Centro Inteligente (p10-centro.js): módulo aislado.
@@ -297,7 +297,53 @@ html=head+'\n'+vbj+B('build/p0-data.js')+B('build/p0-pub.js')+"const SOCIAL_ICON
 if KINI: html=kini_brand(html)
 if PROFILE in('solo','v3'): html=solo_brand(html,PROFILE=='v3')
 if PROFILE in('gym','nc'): html=gym_brand(html,PROFILE=='nc')
+# V26.69 · app instalable (PWA): manifiesto del sistema, manifiesto del Club, service worker e íconos junto al HTML
+APPN={'cliente':('AlmacenRAVE','RAVE','Club RAVE'),'kini':('Kini Distribuidora','Kini','Club Kini'),'v3':('Sistema VB Empresas','VB','Club VB'),'solo':('Sistema VB','VB','Club VB'),'gym':('Mi Gimnasio','Mi Gimnasio','Club Mi Gimnasio'),'nc':('Movimiento Inteligente','Mov. Inteligente','Club Movimiento')}.get('cliente' if V=='cliente' else PROFILE,('Sistema RAVE','RAVE','Club RAVE'))
+html=html.replace('<meta name="theme-color" content="#242220">','<meta name="theme-color" content="#242220">\n<link rel="manifest" id="pwa-man" href="app.webmanifest">\n<meta name="apple-mobile-web-app-capable" content="yes">\n<meta name="mobile-web-app-capable" content="yes">\n<meta name="apple-mobile-web-app-title" content="%s">\n<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">'%APPN[1],1)
+html=html.replace("base-uri 'none'","manifest-src 'self'; worker-src 'self'; base-uri 'none'",1)
+def pwa_files(d):
+    from PIL import Image,ImageDraw,ImageFont
+    def icon(n,mask=False):
+        bg='#242220'
+        if not KINI and PROFILE not in('solo','v3'): bg=Image.open('build/logo_public.png').convert('RGB').getpixel((3,3))
+        im=Image.new('RGB',(n,n),bg);dr=ImageDraw.Draw(im)
+        if not KINI and PROFILE not in('solo','v3'):
+            lg=Image.open('build/logo_public.png').convert('RGB');w=int(n*(.62 if mask else .82));h=int(lg.height*w/lg.width);lg=lg.resize((w,h),Image.LANCZOS);im.paste(lg,((n-w)//2,(n-h)//2))
+        else:
+            ft=ImageFont.truetype('/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf',int(n*(.42 if mask else .55)));t=APPN[1][:2]
+            bb=dr.textbbox((0,0),t,font=ft);dr.text(((n-bb[2]-bb[0])/2,(n-bb[3]-bb[1])/2-bb[1]/2),t,font=ft,fill='#c9963e')
+        return im
+    for n in (180,192,512):icon(n).save(os.path.join(d,'app-%d.png'%n),optimize=True)
+    icon(512,True).save(os.path.join(d,'app-512m.png'),optimize=True)
+    ic=[{'src':'app-192.png','sizes':'192x192','type':'image/png'},{'src':'app-512.png','sizes':'512x512','type':'image/png'},{'src':'app-512m.png','sizes':'512x512','type':'image/png','purpose':'maskable'}]
+    base={'lang':'es-AR','dir':'ltr','display':'standalone','display_override':['standalone','minimal-ui'],'background_color':'#242220','theme_color':'#242220','scope':'./','icons':ic}
+    m1=dict(base,id='./?app=sistema',name=APPN[0]+' · Sistema',short_name=APPN[1],description='Sistema de gestión: ventas, caja, stock, clientes, reparto y seguridad.',start_url='./#acceso',orientation='any',categories=['business','productivity'],
+            shortcuts=[{'name':'Vender','url':'./#panel/vender'},{'name':'Reparto','url':'./#panel/reparto'},{'name':'Mi hoja de ruta','url':'./#panel/copiloto'}])
+    m2=dict(base,id='./?app=club',name=APPN[2],short_name=APPN[2][:12],description='Tu tarjeta del Club, beneficios, pedidos y contacto con el local.',start_url='./#mitarjeta',orientation='portrait',categories=['shopping','lifestyle'])
+    json.dump(m1,open(os.path.join(d,'app.webmanifest'),'w',encoding='utf8'),ensure_ascii=False,indent=1)
+    json.dump(m2,open(os.path.join(d,'club.webmanifest'),'w',encoding='utf8'),ensure_ascii=False,indent=1)
+    sw=open('pwa-sw.js',encoding='utf8').read().replace('__VER__',build['ver']+' '+V)
+    open(os.path.join(d,'sw.js'),'w',encoding='utf8').write(sw)
 open(out,'w',encoding='utf8').write(html)
+_gd=os.path.dirname(os.path.abspath(out))
+if PROFILE in('gym','nc'):
+    GYM_PWA=1
+    _sw=os.path.join(_gd,'sw.js');_old=open(_sw,encoding='utf8').read() if os.path.exists(_sw) else None
+    pwa_files(_gd)
+    if _old is not None: open(_sw,'w',encoding='utf8').write(_old)
+    from PIL import Image
+    _src=os.path.join(_gd,'icon-512.png')
+    if os.path.exists(_src):
+        _im=Image.open(_src).convert('RGB')
+        for n in (180,192,512):_im.resize((n,n),Image.LANCZOS).save(os.path.join(_gd,'app-%d.png'%n),optimize=True)
+        _bg=_im.getpixel((3,3));_m=Image.new('RGB',(512,512),_bg);_s=_im.resize((400,400),Image.LANCZOS);_m.paste(_s,(56,56));_m.save(os.path.join(_gd,'app-512m.png'),optimize=True)
+    _nm=('Movimiento Inteligente','Mov. Inteligente') if PROFILE=='nc' else ('Mi Gimnasio','Mi Gimnasio')
+    _col='#060b21' if PROFILE=='nc' else '#0a0a0a'
+    for _f,_d in (('app.webmanifest',dict(name=_nm[0]+' · Sistema',short_name=_nm[1],description='Gestión del '+('entrenamiento' if PROFILE=='nc' else 'gimnasio')+': socios, cuotas, acceso, clases, rutinas, caja y atención al cliente.',shortcuts=[{'name':'Socios','url':'./#panel/gsocios'},{'name':'Acceso','url':'./#panel/gacceso'},{'name':'Atención al cliente','url':'./#panel/crm'}])),('club.webmanifest',dict(name=_nm[0]+' · Club',short_name=_nm[1][:12]))):
+        _p=os.path.join(_gd,_f);_j=json.load(open(_p,encoding='utf8'));_j.update(_d);_j['background_color']=_j['theme_color']=_col
+        json.dump(_j,open(_p,'w',encoding='utf8'),ensure_ascii=False,indent=1)
+else:
+    pwa_files(_gd)
 m=re.search(r'\n<script>\n(.*?)\n</script>\n</body>',html,re.S)
 open('all.js','w',encoding='utf8').write(m.group(1))
 subprocess.check_call(['node','--check','all.js'])

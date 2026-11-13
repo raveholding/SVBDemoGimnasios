@@ -35,6 +35,29 @@ if "'gym'" not in b:
     b=b.replace("PROFILE not in('kini','solo')","PROFILE not in('kini','solo','gym','nc')",1)
     b=b.replace("vbj='const VB_BANNER=",open(os.path.join(here,'gym_brand.py'),encoding='utf8').read()+"\nvbj='const VB_BANNER=",1)
     b=b.replace("if PROFILE in('solo','v3'): html=solo_brand(html,PROFILE=='v3')","if PROFILE in('solo','v3'): html=solo_brand(html,PROFILE=='v3')\nif PROFILE in('gym','nc'): html=gym_brand(html,PROFILE=='nc')",1)
+    b=b.replace("'solo':('Sistema VB','VB','Club VB')}","'solo':('Sistema VB','VB','Club VB'),'gym':('Mi Gimnasio','Mi Gimnasio','Club Mi Gimnasio'),'nc':('Movimiento Inteligente','Mov. Inteligente','Club Movimiento')}",1)
+    # V29.1 · app instalable con la marca del gimnasio / NC (no la de RAVE) y sin accesos de reparto
+    if 'pwa_files(os.path.dirname' in b and 'GYM_PWA' not in b:
+        b=b.replace("pwa_files(os.path.dirname(os.path.abspath(out)))","""_gd=os.path.dirname(os.path.abspath(out))
+if PROFILE in('gym','nc'):
+    GYM_PWA=1
+    _sw=os.path.join(_gd,'sw.js');_old=open(_sw,encoding='utf8').read() if os.path.exists(_sw) else None
+    pwa_files(_gd)
+    if _old is not None: open(_sw,'w',encoding='utf8').write(_old)
+    from PIL import Image
+    _src=os.path.join(_gd,'icon-512.png')
+    if os.path.exists(_src):
+        _im=Image.open(_src).convert('RGB')
+        for n in (180,192,512):_im.resize((n,n),Image.LANCZOS).save(os.path.join(_gd,'app-%d.png'%n),optimize=True)
+        _bg=_im.getpixel((3,3));_m=Image.new('RGB',(512,512),_bg);_s=_im.resize((400,400),Image.LANCZOS);_m.paste(_s,(56,56));_m.save(os.path.join(_gd,'app-512m.png'),optimize=True)
+    _nm=('Movimiento Inteligente','Mov. Inteligente') if PROFILE=='nc' else ('Mi Gimnasio','Mi Gimnasio')
+    _col='#060b21' if PROFILE=='nc' else '#0a0a0a'
+    for _f,_d in (('app.webmanifest',dict(name=_nm[0]+' · Sistema',short_name=_nm[1],description='Gestión del '+('entrenamiento' if PROFILE=='nc' else 'gimnasio')+': socios, cuotas, acceso, clases, rutinas, caja y atención al cliente.',shortcuts=[{'name':'Socios','url':'./#panel/gsocios'},{'name':'Acceso','url':'./#panel/gacceso'},{'name':'Atención al cliente','url':'./#panel/crm'}])),('club.webmanifest',dict(name=_nm[0]+' · Club',short_name=_nm[1][:12]))):
+        _p=os.path.join(_gd,_f);_j=json.load(open(_p,encoding='utf8'));_j.update(_d);_j['background_color']=_j['theme_color']=_col
+        json.dump(_j,open(_p,'w',encoding='utf8'),ensure_ascii=False,indent=1)
+else:
+    pwa_files(_gd)""",1)
+        assert 'GYM_PWA' in b
     for k in ["'gym','nc')","rave-gym-demo-v1","p11-gym.js","def gym_brand","html=gym_brand"]:assert k in b,k
     wr('build.py',b)
 print('patch ok',D)

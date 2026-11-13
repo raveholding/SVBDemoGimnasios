@@ -353,7 +353,8 @@ const css=`.gp-bento{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));
 .gp-k.big{grid-column:span 2;grid-row:span 2;display:flex;flex-direction:column;justify-content:space-between;background:radial-gradient(420px 220px at 100% 0%,color-mix(in srgb,var(--gold) 20%,transparent),transparent 70%),color-mix(in srgb,var(--card,#18181b) 72%,transparent)}
 .gp-k.big b{font-size:2.6rem;color:var(--gold)}html:not([data-theme=dark]) .gp-k.big b{color:var(--gold2)}html:not([data-theme=dark]) .gp-spark polyline{stroke:var(--gold2)}.gp-spark{width:100%;height:56px;margin-top:.6rem}
 .gp-glass{transition:border-color .2s}.gp-glass:hover{border-color:color-mix(in srgb,var(--gold) 40%,transparent)}
-@media (max-width:900px){.gp-bento{grid-template-columns:repeat(2,minmax(0,1fr))}.gp-k.big{grid-row:auto}}
+@media (max-width:900px){.gp-bento{grid-template-columns:repeat(2,minmax(0,1fr))}.gp-bento>.gp-k{grid-column:auto!important;grid-row:auto!important}.gp-bento>.gp-k.big,.gp-bento>.gp-k:last-child{grid-column:1/-1!important}.gp-k b{font-size:1.35rem}.gp-k.big b{font-size:2rem}}
+@media (max-width:520px){.gp-bento{grid-template-columns:minmax(0,1fr)}.gp-bento>.gp-k{grid-column:1/-1!important}}@media (max-width:700px){#top{position:relative!important;top:auto!important}:root{--topH:0px!important}}
 #toast .gp-undo{display:flex;align-items:center;gap:.8rem;padding:.55rem .6rem .55rem 1rem;border-radius:12px;background:#18181b;color:#fff;box-shadow:0 10px 30px rgba(0,0,0,.4);pointer-events:auto}
 #toast .gp-undo button{min-height:40px;padding:0 .9rem;border-radius:10px;border:0;background:var(--gold);color:#0a0a0a;font-weight:700;cursor:pointer}
 @media (prefers-reduced-motion:reduce){.gp-k,.gp-lk{transition:none}}
@@ -383,10 +384,10 @@ window.addEventListener('storage',e=>{if(e.key===PTK()&&portIn()&&/gacceso|gdash
 setInterval(()=>{try{if(portIn()&&/gacceso|gdash|ginicio/.test(curScreen))rerender();}catch(e){}},15000);
 const portUrl=()=>{try{return new URL('portero.html',location.href).href;}catch(e){return'portero.html';}};
 {const _ac=SCREENS.gacceso&&SCREENS.gacceso.render;if(_ac)SCREENS.gacceso.render=function(){const h=_ac.apply(this,arguments);const x=`<div class="card gp-glass" style="margin:0 0 1rem"><div class="row" style="flex-wrap:wrap;gap:.6rem"><div class="sp"><b>Portero digital para la puerta</b><div class="sm mut">Instalalo en la tablet o el celular de la entrada: valida la cuota con el QR de la app o el DNI, tiene timbre por áreas, pases de visita, PIN del equipo y emergencia. Los ingresos llegan solos acá.</div></div><button class="btn gold" data-act="gOpenUrl" data-u="${esc(portUrl())}">Abrir el portero</button></div></div>`;const i=h.indexOf('</h1>');if(i<0)return x+h;const j=h.indexOf('</div>',i);return j<0?x+h:h.slice(0,j+6)+x+h.slice(j+6);};}
-window.gProBoot=()=>{try{P();applyNav();seed();sweep();portIn();}catch(e){}};
+window.gProBoot=()=>{try{['reparto','copiloto'].forEach(k=>{if(SCREENS[k])SCREENS[k].show=()=>false;});P();applyNav();seed();sweep();portIn();}catch(e){}};
 if(typeof A.login==='function'){const _l=A.login;A.login=function(){const r=_l.apply(this,arguments);window.gProBoot();return r;};}
 {const _ir=SCREENS.ginicio.render;let booted=0;SCREENS.ginicio.render=function(){if(!booted){booted=1;window.gProBoot();}return _ir.apply(this,arguments);};}
-try{applyNav();}catch(e){}
+try{applyNav();}catch(e){}setTimeout(()=>['reparto','copiloto'].forEach(k=>{if(SCREENS[k])SCREENS[k].show=()=>false;}),0);
 setInterval(()=>{try{if(curScreen==='gdash'&&!$('#modal-root .ov')&&!(document.activeElement&&/INPUT|SELECT|TEXTAREA/.test(document.activeElement.tagName)))rerender();}catch(e){}},15000);
 setInterval(()=>{try{if(typeof user!=='undefined'&&user&&sweep()&&/glases|gclases|gdash/.test(location.hash))rerender();}catch(e){}},60000);
 })();}
